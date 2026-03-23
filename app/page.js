@@ -5,5 +5,5 @@ export const metadata = {
 };
 
 export default function Page() {
-    return <RootPage />;
+    return <RootPage template="home" />;
 }
