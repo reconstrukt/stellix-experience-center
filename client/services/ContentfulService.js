@@ -1,9 +1,10 @@
-const CONTENTFUL_HOST = '';
-const CONTENTFUL_SPACE = '';
-const CONTENTFUL_ACCESS_TOKEN = '';
-const CONTENTFUL_NEXT_CACHE_TAG = 'content';
-const CONTENTFUL_BASE = `https://${CONTENTFUL_HOST}/spaces/${CONTENTFUL_SPACE}/environments/master/`;
-const MAX_CONTENTFUL_TRIES = 100;
+import {
+    CONTENTFUL_ACCESS_TOKEN,
+    CONTENTFUL_BASE,
+    CONTENTFUL_NEXT_CACHE_TAG,
+    MAX_CONTENTFUL_TRIES,
+} from '../config/contentful';
+import { IS_PRODUCTION } from '@/client/config/common';
 
 class ContentfulService {
     constructor() {}
@@ -19,7 +20,8 @@ class ContentfulService {
         const searchParams = new URLSearchParams(data);
         const finalURL = `${CONTENTFUL_BASE}${url}?${searchParams}`;
 
-        opts.next = { tags: [CONTENTFUL_NEXT_CACHE_TAG] };
+        if (IS_PRODUCTION) opts.next = { tags: [CONTENTFUL_NEXT_CACHE_TAG] };
+        else opts.next = { revalidate: 5 };
 
         // fetch w/advanced error handling
         try {
@@ -89,6 +91,14 @@ class ContentfulService {
         };
 
         replaceLinkObjects(res);
+    }
+
+    async getEntryById(entryId) {
+        const res = await this.fetch(`entries`, {
+            'sys.id': entryId,
+        });
+        this.overloadObjectWithIncludes(res);
+        return res?.items?.[0] || null;
     }
 
     // async getAllContentfulPages() {
