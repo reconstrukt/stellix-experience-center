@@ -6,6 +6,12 @@ import {
 } from '../config/contentful';
 import { IS_PRODUCTION } from '@/client/config/common';
 
+console.log({
+    CONTENTFUL_ACCESS_TOKEN,
+    CONTENTFUL_BASE,
+    IS_PRODUCTION,
+});
+
 class ContentfulService {
     constructor() {}
 
