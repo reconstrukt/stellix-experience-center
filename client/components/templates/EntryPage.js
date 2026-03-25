@@ -9,6 +9,18 @@ function EntryPage({ entryId, data }) {
 
     // Through this page, you should determine the entry type and then call the appropriate entry template
     // Careful: Use updatedData and not data to render the components down the line
+
+    const contentTypeId = updatedData?.sys?.contentType?.sys?.id;
+
+    if (contentTypeId === 'welcomeScreen') {
+        return (
+            <WelcomeScreenTemplate
+                entryId={entryId}
+                data={data}
+            />
+        );
+    }
+
     return <pre>{JSON.stringify(updatedData, null, 2)}</pre>;
 }
 
