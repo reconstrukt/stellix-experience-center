@@ -1,3 +1,5 @@
+'use client';
+
 import { useContentfulLiveUpdates } from '@contentful/live-preview/react';
 import { IS_PRODUCTION } from '@/client/config/common';
 
