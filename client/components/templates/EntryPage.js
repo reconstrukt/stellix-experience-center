@@ -3,6 +3,12 @@
 import { useContentfulLiveUpdates } from '@contentful/live-preview/react';
 import { IS_PRODUCTION } from '@/client/config/common';
 import WelcomeScreenTemplate from '@/client/components/templates/TemplateWelcomeScreen';
+import EventScreenTemplate from '@/client/components/templates/TemplateEventScreen';
+
+const CONTENT_TYPE_TO_TEMPLATE = {
+    welcomeScreen: WelcomeScreenTemplate,
+    eventInfo: EventScreenTemplate,
+};
 
 function EntryPage({ entryId, data }) {
     const updatedData = useContentfulLiveUpdates(data, { skip: IS_PRODUCTION });
@@ -13,14 +19,14 @@ function EntryPage({ entryId, data }) {
 
     const contentTypeId = updatedData?.sys?.contentType?.sys?.id;
 
-    if (contentTypeId === 'welcomeScreen') {
+    const Template = CONTENT_TYPE_TO_TEMPLATE[contentTypeId];
+    if (Template)
         return (
-            <WelcomeScreenTemplate
+            <Template
                 entryId={entryId}
-                data={data}
+                data={updatedData}
             />
         );
-    }
 
     return <pre>{JSON.stringify(updatedData, null, 2)}</pre>;
 }

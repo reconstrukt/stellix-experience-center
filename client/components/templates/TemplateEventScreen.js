@@ -2,12 +2,16 @@ import { Box, Stack, Typography } from '@mui/material';
 import { toHttpsUrl } from '@/client/lib/url';
 import MotionWrapper from '../common/MotionWrapper';
 
-export default function WelcomeScreenTemplate({ data }) {
+export default function EventScreenTemplate({ data }) {
     const title = data?.fields?.title ?? '';
+    const subtitle = data?.fields?.subtitle ?? '';
+    const description = data?.fields?.description ?? '';
     const bottomLogo = Boolean(data?.fields?.bottomLogo);
     const centerImageUrl = toHttpsUrl(data?.fields?.centerImage?.fields?.file?.url);
     const centerImageAlt = data?.fields?.centerImage?.fields?.title ?? title ?? 'Welcome';
     const centerText = data?.fields?.centerText ?? '';
+    const eventLogoUrl = toHttpsUrl(data?.fields?.eventLogo?.fields?.file?.url);
+    const eventLogoAlt = data?.fields?.eventLogo?.fields?.title ?? 'Event logo';
 
     return (
         <Stack
@@ -15,20 +19,39 @@ export default function WelcomeScreenTemplate({ data }) {
                 minHeight: '100vh',
                 px: 4,
                 py: 6,
-                pb: '250px',
+                pb: '400px',
                 position: 'relative',
             }}>
             <Stack
                 spacing={3}
-                sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: '100px' }}>
+                sx={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '60px',
+                    maxWidth: '700px',
+                    margin: '0 auto',
+                }}>
                 <MotionWrapper
                     mounted={true}
                     index={0}>
+                    <Typography
+                        variant="h3"
+                        sx={{ color: 'white' }}>
+                        Welcome to
+                    </Typography>
+                </MotionWrapper>
+
+                <MotionWrapper
+                    mounted={true}
+                    index={2}>
                     {title ? (
                         <Typography
-                            variant="h3"
-                            component="h1"
-                            sx={{ color: 'white' }}>
+                            variant="h4"
+                            sx={{
+                                textAlign: 'center',
+                                whiteSpace: 'pre-wrap', // preserve newlines
+                            }}>
                             {title}
                         </Typography>
                     ) : null}
@@ -37,32 +60,36 @@ export default function WelcomeScreenTemplate({ data }) {
                 <MotionWrapper
                     mounted={true}
                     index={2}>
-                    {centerImageUrl ? (
-                        <Box
-                            component="img"
-                            src={centerImageUrl}
-                            alt={centerImageAlt}
-                            sx={{
-                                width: 'min(520px, 90vw)',
-                                height: 'auto',
-                                maxHeight: '400px',
-                                objectFit: 'contain',
-                            }}
-                        />
-                    ) : centerText ? (
+                    {subtitle ? (
                         <Typography
-                            variant="h4"
+                            variant="h5"
                             sx={{
                                 textAlign: 'center',
                                 whiteSpace: 'pre-wrap', // preserve newlines
                             }}>
-                            {centerText}
+                            {subtitle}
+                        </Typography>
+                    ) : null}
+                </MotionWrapper>
+
+                <MotionWrapper
+                    mounted={true}
+                    index={2}>
+                    {description ? (
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                textAlign: 'center',
+                                whiteSpace: 'pre-wrap',
+                                maxWidth: 'min(960px, 90vw)',
+                            }}>
+                            {description}
                         </Typography>
                     ) : null}
                 </MotionWrapper>
             </Stack>
 
-            {bottomLogo ? (
+            {eventLogoUrl ? (
                 <Box
                     sx={{
                         position: 'absolute',
@@ -75,11 +102,12 @@ export default function WelcomeScreenTemplate({ data }) {
                         index={4}>
                         <Box
                             component="img"
-                            src="/stellix-logo-white.svg"
-                            alt="Stellix"
+                            src={eventLogoUrl}
+                            alt={eventLogoAlt}
                             sx={{
                                 width: '301px',
-                                height: '109px',
+                                height: '290px',
+                                objectFit: 'contain',
                             }}
                         />
                     </MotionWrapper>

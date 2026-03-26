@@ -35,6 +35,22 @@ const darkTheme = createTheme({
             fontSize: '81px',
             fontWeight: 400,
         },
+        h5: {
+            color: '#FFF',
+            fontFamily: '"Museo Sans Rounded"',
+            fontSize: '34px',
+            fontStyle: 'normal',
+            fontWeight: 250,
+            lineHeight: '220%',
+        },
+        body1: {
+            color: '#FFF',
+            fontFamily: '"Museo Sans Rounded"',
+            fontSize: '24px',
+            fontStyle: 'normal',
+            fontWeight: 300,
+            lineHeight: '150%',
+        },
     },
     components: {
         MuiTypography: {
