@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import Time from './Time';
 
 function Background({ children }) {
     return (
@@ -18,6 +19,15 @@ function Background({ children }) {
                     width: '100%',
                     position: 'relative',
                 }}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '32px',
+                        right: '40px',
+                        zIndex: 2,
+                    }}>
+                    <Time />
+                </Box>
                 <Box
                     component="img"
                     src="/background-dots.svg"
