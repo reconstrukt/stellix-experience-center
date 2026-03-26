@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
+import useDeviceNow from '@/client/hooks/useDeviceNow';
 
 function formatTime(date, locale) {
     // en-US produces the requested format: "09:30 AM"
@@ -10,19 +11,8 @@ function formatTime(date, locale) {
     }).format(date);
 }
 
-export default function Time({
-    locale = 'en-US',
-    updateIntervalMs = 1000,
-    sx,
-    ...props
-}) {
-    const [now, setNow] = useState(null);
-
-    useEffect(() => {
-        setNow(new Date());
-        const id = setInterval(() => setNow(new Date()), updateIntervalMs);
-        return () => clearInterval(id);
-    }, [updateIntervalMs]);
+export default function Time({ locale = 'en-US', updateIntervalMs = 1000, sx, ...props }) {
+    const now = useDeviceNow({ updateIntervalMs });
 
     const text = useMemo(() => (now ? formatTime(now, locale) : ''), [now, locale]);
 
@@ -30,13 +20,9 @@ export default function Time({
         <Box
             component="span"
             sx={{
-                color: '#FFF',
                 textAlign: 'right',
-                fontFamily: '"Museo Sans Rounded"',
                 fontSize: '20px',
-                fontStyle: 'normal',
                 fontWeight: 250,
-                display: 'block',
                 ...sx,
             }}
             suppressHydrationWarning

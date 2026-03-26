@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import useDeviceNow from '@/client/hooks/useDeviceNow';
 
 function toMinutesSinceMidnight({ hour, minute, meridiem }) {
     let h = hour % 12;
@@ -50,16 +51,15 @@ function parseTimeslotRange(timeslot) {
 }
 
 export default function useActiveAgendaIndex(agendaItems, { pollMs = 30_000 } = {}) {
-    const [now, setNow] = useState(() => new Date());
+    const now = useDeviceNow({ updateIntervalMs: pollMs });
 
-    useEffect(() => {
-        const id = setInterval(() => setNow(new Date()), pollMs);
-        return () => clearInterval(id);
-    }, [pollMs]);
-
-    const nowMinutes = useMemo(() => now.getHours() * 60 + now.getMinutes(), [now]);
+    const nowMinutes = useMemo(() => {
+        if (!now) return null;
+        return now.getHours() * 60 + now.getMinutes();
+    }, [now]);
 
     return useMemo(() => {
+        if (nowMinutes == null) return -1;
         for (let idx = 0; idx < agendaItems.length; idx += 1) {
             const range = parseTimeslotRange(agendaItems[idx]?.timeslot);
             if (!range) continue;
