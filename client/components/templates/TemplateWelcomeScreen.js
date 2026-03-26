@@ -1,5 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { toHttpsUrl } from '@/client/lib/url';
+import MotionWrapper from '../common/MotionWrapper';
 
 export default function WelcomeScreenTemplate({ data }) {
     const title = data?.fields?.title ?? '';
@@ -22,53 +23,69 @@ export default function WelcomeScreenTemplate({ data }) {
             <Stack
                 spacing={3}
                 sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: '100px' }}>
-                {title ? (
-                    <Typography
-                        variant="h3"
-                        component="h1"
-                        sx={{ color: 'white' }}>
-                        {title}
-                    </Typography>
-                ) : null}
+                <MotionWrapper
+                    mounted={true}
+                    index={0}>
+                    {title ? (
+                        <Typography
+                            variant="h3"
+                            component="h1"
+                            sx={{ color: 'white' }}>
+                            {title}
+                        </Typography>
+                    ) : null}
+                </MotionWrapper>
 
-                {centerImageUrl ? (
-                    <Box
-                        component="img"
-                        src={centerImageUrl}
-                        alt={centerImageAlt}
-                        sx={{
-                            width: 'min(520px, 90vw)',
-                            height: 'auto',
-                            maxHeight: '400px',
-                            objectFit: 'contain',
-                        }}
-                    />
-                ) : centerText ? (
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            textAlign: 'center',
-                            whiteSpace: 'pre-wrap', // preserve newlines
-                        }}>
-                        {centerText}
-                    </Typography>
-                ) : null}
+                <MotionWrapper
+                    mounted={true}
+                    index={2}>
+                    {centerImageUrl ? (
+                        <Box
+                            component="img"
+                            src={centerImageUrl}
+                            alt={centerImageAlt}
+                            sx={{
+                                width: 'min(520px, 90vw)',
+                                height: 'auto',
+                                maxHeight: '400px',
+                                objectFit: 'contain',
+                            }}
+                        />
+                    ) : centerText ? (
+                        <Typography
+                            variant="h4"
+                            sx={{
+                                textAlign: 'center',
+                                whiteSpace: 'pre-wrap', // preserve newlines
+                            }}>
+                            {centerText}
+                        </Typography>
+                    ) : null}
+                </MotionWrapper>
             </Stack>
 
             {bottomLogo ? (
                 <Box
-                    component="img"
-                    src="/stellix-logo-white.svg"
-                    alt="Stellix"
                     sx={{
                         position: 'absolute',
                         left: '50%',
                         transform: 'translateX(-50%)',
                         bottom: '100px',
-                        width: '301px',
-                        height: '109px',
-                    }}
-                />
+                    }}>
+                    <MotionWrapper
+                        mounted={true}
+                        index={4}>
+                        <Box
+                            component="img"
+                            src="/stellix-logo-white.svg"
+                            alt="Stellix"
+                            sx={{
+                                width: '301px',
+                                height: '109px',
+                            }}
+                        />
+                    </MotionWrapper>
+                </Box>
             ) : null}
         </Stack>
     );
