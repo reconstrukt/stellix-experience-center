@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Providers from '@/client/components/functional/Providers';
 import Container from '@mui/material/Container';
 import { Suspense } from 'react';
+import './globals.css';
 
 export default function RootLayout({ children }) {
     return (

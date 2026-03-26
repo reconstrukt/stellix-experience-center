@@ -20,7 +20,7 @@ function Background({ children }) {
                 }}>
                 <Box
                     component="img"
-                    src="/mask-group.svg"
+                    src="/background-dots.svg"
                     alt=""
                     aria-hidden="true"
                     sx={{
