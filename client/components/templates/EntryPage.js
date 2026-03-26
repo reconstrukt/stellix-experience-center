@@ -4,10 +4,12 @@ import { useContentfulLiveUpdates } from '@contentful/live-preview/react';
 import { IS_PRODUCTION } from '@/client/config/common';
 import WelcomeScreenTemplate from '@/client/components/templates/TemplateWelcomeScreen';
 import EventScreenTemplate from '@/client/components/templates/TemplateEventScreen';
+import AgendaScreenTemplate from '@/client/components/templates/TemplateAgendaScreen';
 
 const CONTENT_TYPE_TO_TEMPLATE = {
     welcomeScreen: WelcomeScreenTemplate,
     eventInfo: EventScreenTemplate,
+    agendaScreen: AgendaScreenTemplate,
 };
 
 function EntryPage({ entryId, data }) {
