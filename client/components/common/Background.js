@@ -8,6 +8,8 @@ function Background({ children }) {
                 minHeight: '100dvh',
                 width: '100%',
                 backgroundColor: 'black',
+                position: 'relative',
+                overflowX: 'hidden',
             }}>
             <Box
                 sx={{
@@ -15,13 +17,15 @@ function Background({ children }) {
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                    minHeight: '100dvh',
+                    position: 'fixed',
+                    inset: 0,
                     width: '100%',
-                    position: 'relative',
+                    height: '100dvh',
+                    zIndex: 0,
                 }}>
                 <Box
                     sx={{
-                        position: 'absolute',
+                        position: 'fixed',
                         top: '32px',
                         right: '40px',
                         zIndex: 2,
@@ -43,6 +47,15 @@ function Background({ children }) {
                         userSelect: 'none',
                     }}
                 />
+            </Box>
+            <Box
+                sx={{
+                    position: 'relative',
+                    zIndex: 1,
+                    minHeight: '100dvh',
+                    width: '100%',
+                    overflowX: 'hidden',
+                }}>
                 {children}
             </Box>
         </Box>
