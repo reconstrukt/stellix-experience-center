@@ -13,15 +13,21 @@ export default function EventScreenTemplate({ data }) {
         <Stack
             sx={{
                 minHeight: '100vh',
+                width: '100%',
                 px: 4,
                 py: 6,
                 pb: '400px',
                 position: 'relative',
+                overflowX: 'hidden',
+                WebkitTextSizeAdjust: '100%',
+                textSizeAdjust: '100%',
             }}>
             <Stack
                 spacing={3}
                 sx={{
                     flex: 1,
+                    width: '100%',
+                    minWidth: 0,
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '60px',
@@ -47,6 +53,9 @@ export default function EventScreenTemplate({ data }) {
                             sx={{
                                 textAlign: 'center',
                                 whiteSpace: 'pre-wrap', // preserve newlines
+                                maxWidth: '100%',
+                                overflowWrap: 'anywhere',
+                                wordBreak: 'break-word',
                             }}>
                             {title}
                         </Typography>
@@ -61,7 +70,9 @@ export default function EventScreenTemplate({ data }) {
                             variant="h5"
                             sx={{
                                 textAlign: 'center',
-                                whiteSpace: 'pre-wrap', // preserve newlines
+                                maxWidth: '100%',
+                                overflowWrap: 'anywhere',
+                                wordBreak: 'break-word',
                             }}>
                             {subtitle}
                         </Typography>
@@ -76,8 +87,9 @@ export default function EventScreenTemplate({ data }) {
                             variant="body1"
                             sx={{
                                 textAlign: 'center',
-                                whiteSpace: 'pre-wrap',
-                                maxWidth: 'min(960px, 90vw)',
+                                maxWidth: '100%',
+                                overflowWrap: 'anywhere',
+                                wordBreak: 'break-word',
                             }}>
                             {description}
                         </Typography>
