@@ -24,15 +24,6 @@ function Background({ children }) {
                     zIndex: 0,
                 }}>
                 <Box
-                    sx={{
-                        position: 'fixed',
-                        top: '32px',
-                        right: '40px',
-                        zIndex: 2,
-                    }}>
-                    <Time />
-                </Box>
-                <Box
                     component="img"
                     src="/background-dots.svg"
                     alt=""
@@ -47,6 +38,14 @@ function Background({ children }) {
                         userSelect: 'none',
                     }}
                 />
+            </Box>
+            <Box
+                sx={{
+                    position: 'fixed',
+                    top: '32px',
+                    right: '40px',
+                }}>
+                <Time />
             </Box>
             <Box
                 sx={{

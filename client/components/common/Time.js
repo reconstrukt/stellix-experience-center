@@ -1,3 +1,5 @@
+'use client';
+
 import Box from '@mui/material/Box';
 import React, { useMemo } from 'react';
 import useDeviceNow from '@/client/hooks/useDeviceNow';
@@ -14,18 +16,17 @@ function formatTime(date, locale) {
 export default function Time({ locale = 'en-US', updateIntervalMs = 1000, sx, ...props }) {
     const now = useDeviceNow({ updateIntervalMs });
 
-    const text = useMemo(() => (now ? formatTime(now, locale) : ''), [now, locale]);
+    const text = useMemo(() => (now ? formatTime(now, locale) : '--:--'), [now, locale]);
 
     return (
         <Box
-            component="span"
             sx={{
+                color: '#FFF',
                 textAlign: 'right',
                 fontSize: '20px',
                 fontWeight: 250,
                 ...sx,
             }}
-            suppressHydrationWarning
             {...props}>
             {text}
         </Box>
