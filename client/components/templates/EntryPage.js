@@ -2,6 +2,7 @@
 
 import { useContentfulLiveUpdates } from '@contentful/live-preview/react';
 import { IS_PRODUCTION } from '@/client/config/common';
+import WelcomeScreenTemplate from '@/client/components/templates/TemplateWelcomeScreen';
 
 function EntryPage({ entryId, data }) {
     const updatedData = useContentfulLiveUpdates(data, { skip: IS_PRODUCTION });

@@ -31,7 +31,8 @@ export default function WelcomeScreenTemplate({ data }) {
                 {title ? (
                     <Typography
                         variant="h4"
-                        component="h1">
+                        component="h1"
+                        sx={{ color: 'white' }}>
                         {title}
                     </Typography>
                 ) : null}
