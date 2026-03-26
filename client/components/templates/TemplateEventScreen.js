@@ -6,10 +6,6 @@ export default function EventScreenTemplate({ data }) {
     const title = data?.fields?.title ?? '';
     const subtitle = data?.fields?.subtitle ?? '';
     const description = data?.fields?.description ?? '';
-    const bottomLogo = Boolean(data?.fields?.bottomLogo);
-    const centerImageUrl = toHttpsUrl(data?.fields?.centerImage?.fields?.file?.url);
-    const centerImageAlt = data?.fields?.centerImage?.fields?.title ?? title ?? 'Welcome';
-    const centerText = data?.fields?.centerText ?? '';
     const eventLogoUrl = toHttpsUrl(data?.fields?.eventLogo?.fields?.file?.url);
     const eventLogoAlt = data?.fields?.eventLogo?.fields?.title ?? 'Event logo';
 
