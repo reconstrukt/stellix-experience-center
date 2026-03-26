@@ -16,14 +16,15 @@ export default function Time({
     sx,
     ...props
 }) {
-    const [now, setNow] = useState(() => new Date());
+    const [now, setNow] = useState(null);
 
     useEffect(() => {
+        setNow(new Date());
         const id = setInterval(() => setNow(new Date()), updateIntervalMs);
         return () => clearInterval(id);
     }, [updateIntervalMs]);
 
-    const text = useMemo(() => formatTime(now, locale), [now, locale]);
+    const text = useMemo(() => (now ? formatTime(now, locale) : ''), [now, locale]);
 
     return (
         <Box
@@ -38,6 +39,7 @@ export default function Time({
                 display: 'block',
                 ...sx,
             }}
+            suppressHydrationWarning
             {...props}>
             {text}
         </Box>
