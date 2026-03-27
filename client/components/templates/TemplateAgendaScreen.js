@@ -1,6 +1,8 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 import useActiveAgendaIndex from '@/client/hooks/useActiveAgendaIndex';
+import { toHttpsUrl } from '@/client/lib/url';
+import MotionWrapper from '../common/MotionWrapper';
 
 function buildAgendaItems(fields) {
     const items = [];
@@ -18,6 +20,8 @@ export default function AgendaScreenTemplate({ data }) {
     const title = fields?.title ?? 'Agenda';
     const dateHeading = fields?.dateHeading ?? '';
     const agendaItems = buildAgendaItems(fields);
+    const eventLogoUrl = toHttpsUrl(fields?.eventLogo?.fields?.file?.url);
+    const eventLogoAlt = fields?.eventLogo?.fields?.title ?? 'Event logo';
 
     const activeIndex = useActiveAgendaIndex(agendaItems);
 
@@ -27,7 +31,7 @@ export default function AgendaScreenTemplate({ data }) {
                 minHeight: '100vh',
                 px: 4,
                 py: 6,
-                pb: '250px',
+                pb: '400px',
                 position: 'relative',
             }}>
             <Stack
@@ -123,6 +127,31 @@ export default function AgendaScreenTemplate({ data }) {
                     </Stack>
                 </Box>
             </Stack>
+
+            {eventLogoUrl ? (
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        bottom: '0px',
+                    }}>
+                    <MotionWrapper
+                        mounted={true}
+                        index={4}>
+                        <Box
+                            component="img"
+                            src={eventLogoUrl}
+                            alt={eventLogoAlt}
+                            sx={{
+                                width: '301px',
+                                height: '290px',
+                                objectFit: 'contain',
+                            }}
+                        />
+                    </MotionWrapper>
+                </Box>
+            ) : null}
         </Stack>
     );
 }

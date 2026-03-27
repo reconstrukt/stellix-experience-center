@@ -103,7 +103,7 @@ export default function EventScreenTemplate({ data }) {
                         position: 'absolute',
                         left: '50%',
                         transform: 'translateX(-50%)',
-                        bottom: '100px',
+                        bottom: '0px',
                     }}>
                     <MotionWrapper
                         mounted={true}

@@ -10,6 +10,8 @@ export default function SpeakerScreenTemplate({ data }) {
     const speakerBio = data?.fields?.speakerOneBio ?? '';
     const speakerPhotoUrl = toHttpsUrl(data?.fields?.speakerOnePhoto?.fields?.file?.url);
     const speakerPhotoAlt = data?.fields?.speakerOnePhoto?.fields?.title ?? speakerName ?? 'Speaker portrait';
+    const eventLogoUrl = toHttpsUrl(data?.fields?.eventLogo?.fields?.file?.url);
+    const eventLogoAlt = data?.fields?.eventLogo?.fields?.title ?? 'Event logo';
 
     return (
         <Stack
@@ -147,6 +149,31 @@ export default function SpeakerScreenTemplate({ data }) {
                     ) : null}
                 </MotionWrapper>
             </Stack>
+
+            {eventLogoUrl ? (
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        bottom: '0px',
+                    }}>
+                    <MotionWrapper
+                        mounted={true}
+                        index={6}>
+                        <Box
+                            component="img"
+                            src={eventLogoUrl}
+                            alt={eventLogoAlt}
+                            sx={{
+                                width: '301px',
+                                height: '290px',
+                                objectFit: 'contain',
+                            }}
+                        />
+                    </MotionWrapper>
+                </Box>
+            ) : null}
         </Stack>
     );
 }
