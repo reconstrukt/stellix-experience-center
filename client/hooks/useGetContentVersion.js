@@ -3,7 +3,7 @@ import LocalApiService from '@/client/services/LocalApiService';
 
 function useGetContentVersion() {
     const { data, isValidating, isLoading } = useSWR('content-version', () => LocalApiService.getContentVersion(), {
-        refreshInterval: 10000,
+        refreshInterval: 30000,
         refreshWhenHidden: false,
         revalidateOnFocus: true,
     });
