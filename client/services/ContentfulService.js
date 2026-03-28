@@ -107,16 +107,24 @@ class ContentfulService {
         return res?.items?.[0] || null;
     }
 
-    // async getAllContentfulPages() {
-    //     const res = await this.fetch(`entries`, {
-    //         content_type: 'page',
-    //         include: 10,
-    //         'fields.attachToProductTag[exists]': false,
-    //         'fields.isArticle[ne]': true,
-    //     });
-    //     this.overloadObjectWithIncludes(res);
-    //     return res?.items;
-    // }
+    async getAllLobbyPlaylists(loadIncludes = false) {
+        const res = await this.fetch(`entries`, {
+            content_type: 'lobbyPlaylist',
+            include: loadIncludes ? 10 : 0,
+        });
+        if (loadIncludes) this.overloadObjectWithIncludes(res);
+        return res?.items;
+    }
+
+    async getMostRecentlyPublishedLobbyPlaylist() {
+        const res = await this.fetch(`entries`, {
+            content_type: 'lobbyPlaylist',
+            order: '-sys.publishedAt',
+            limit: 1,
+        });
+        this.overloadObjectWithIncludes(res);
+        return res?.items?.[0] || null;
+    }
 }
 
 export default new ContentfulService();

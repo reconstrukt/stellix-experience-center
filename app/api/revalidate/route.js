@@ -1,10 +1,38 @@
 import { NextResponse } from 'next/server';
-import tempFileSystemService from '@/server/services/TempFileSystemService';
+import TempFileSystemService from '@/server/services/TempFileSystemService';
+import { revalidateTag } from 'next/cache';
+import { CONTENTFUL_NEXT_CACHE_TAG, CONTENTFUL_REVALIDATE_SECRET } from '@/client/config/contentful';
 
-export async function GET() {
+const revalidateContentTypes = ['agendaScreen', 'eventInfo', 'lobbyPlaylist', 'speakerInfo', 'welcomeScreen'];
+
+export async function POST(request) {
+    const { searchParams } = new URL(request.url);
+    const secret = searchParams.get('secret');
+
+    if (secret !== CONTENTFUL_REVALIDATE_SECRET) {
+        return NextResponse.json({
+            error: 'Invalid request',
+            revalidated: false,
+        });
+    }
+
     const version = Date.now();
+    let body;
+    let revalidated = false;
     try {
-        await tempFileSystemService.setVersion(version);
+        try {
+            body = await request.json();
+        } catch (e) {
+            console.log(e);
+        }
+
+        const contentType = body?.sys?.contentType?.sys?.id;
+
+        if (revalidateContentTypes.includes(contentType)) {
+            await TempFileSystemService.setVersion(version);
+            revalidateTag(CONTENTFUL_NEXT_CACHE_TAG);
+            revalidated = true;
+        }
     } catch (error) {
         return NextResponse.json(
             {
@@ -16,5 +44,5 @@ export async function GET() {
         );
     }
 
-    return NextResponse.json({ success: true, version });
+    return NextResponse.json({ success: true, revalidated, version });
 }

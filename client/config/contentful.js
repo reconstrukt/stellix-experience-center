@@ -10,3 +10,4 @@ export const CONTENTFUL_ACCESS_TOKEN = IS_PRODUCTION ? CONTENTFUL_PROD_ACCESS_TO
 export const CONTENTFUL_NEXT_CACHE_TAG = 'content';
 export const CONTENTFUL_BASE = `https://${CONTENTFUL_HOST}/spaces/${CONTENTFUL_SPACE}/environments/master/`;
 export const MAX_CONTENTFUL_TRIES = 100;
+export const CONTENTFUL_REVALIDATE_SECRET = '239kQ6k9QDyy';

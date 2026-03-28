@@ -10,6 +10,13 @@ export const storeDefinition = {
         persistent: false,
         default: 0,
     },
+    content: {
+        persistent: false,
+        default: {
+            isLoading: true,
+            data: {},
+        },
+    },
 };
 
 export const storeDefaults = Object.keys(storeDefinition).reduce((acc, key) => {
