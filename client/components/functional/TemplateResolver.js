@@ -4,12 +4,14 @@ import WelcomeScreenTemplate from '@/client/components/templates/TemplateWelcome
 import EventScreenTemplate from '@/client/components/templates/TemplateEventScreen';
 import AgendaScreenTemplate from '@/client/components/templates/TemplateAgendaScreen';
 import SpeakerScreenTemplate from '@/client/components/templates/TemplateSpeakerScreen';
+import FullScreenMediaTemplate from '@/client/components/templates/TemplateFullScreenMedia';
 
 const CONTENT_TYPE_TO_TEMPLATE = {
     welcomeScreen: WelcomeScreenTemplate,
     eventInfo: EventScreenTemplate,
     agendaScreen: AgendaScreenTemplate,
     speakerInfo: SpeakerScreenTemplate,
+    fullScreenMedia: FullScreenMediaTemplate,
 };
 
 function TemplateResolver({ entryId, data, fallback = null }) {
