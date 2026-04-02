@@ -1,30 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { toHttpsUrl } from '@/client/lib/url';
+import DatavizStub from '../common/DatavizStub';
 import MotionWrapper from '../common/MotionWrapper';
-
-function DatavizStub() {
-    return (
-        <Box
-            sx={{
-                width: '100%',
-                maxWidth: '900px',
-                height: 'min(520px, 60vh)',
-                border: '1px dashed rgba(255, 255, 255, 0.5)',
-                borderRadius: 2,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                px: 3,
-                textAlign: 'center',
-            }}>
-            <Typography
-                variant="h6"
-                sx={{ color: 'rgba(255, 255, 255, 0.85)' }}>
-                Dataviz stub (replace with data graphics)
-            </Typography>
-        </Box>
-    );
-}
 
 export default function DatavizTemplate({ data }) {
     const title = data?.fields?.title ?? '';
@@ -109,4 +86,3 @@ export default function DatavizTemplate({ data }) {
         </Stack>
     );
 }
-
