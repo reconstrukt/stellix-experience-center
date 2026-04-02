@@ -20,7 +20,7 @@ export default function SpeakerScreenTemplate({ data }) {
                 width: '100%',
                 px: 4,
                 py: 6,
-                pb: '400px',
+                pb: '800px',
                 position: 'relative',
                 overflowX: 'hidden',
             }}>
@@ -28,9 +28,9 @@ export default function SpeakerScreenTemplate({ data }) {
                 sx={{
                     flex: 1,
                     width: '100%',
-                    maxWidth: '750px',
+                    maxWidth: '1500px',
                     margin: '0 auto',
-                    gap: '56px',
+                    gap: '112px',
                     justifyContent: 'center',
                 }}>
                 <MotionWrapper
@@ -56,8 +56,8 @@ export default function SpeakerScreenTemplate({ data }) {
                     <Box
                         sx={{
                             display: 'grid',
-                            gridTemplateColumns: 'minmax(260px, 340px) minmax(0, 1fr)',
-                            gap: '48px',
+                            gridTemplateColumns: 'minmax(520px, 680px) minmax(0, 1fr)',
+                            gap: '96px',
                             alignItems: 'flex-end',
                             width: '100%',
                         }}>
@@ -68,10 +68,10 @@ export default function SpeakerScreenTemplate({ data }) {
                                 alt={speakerPhotoAlt}
                                 sx={{
                                     width: '100%',
-                                    maxWidth: '340px',
+                                    maxWidth: '680px',
                                     height: 'auto',
                                     objectFit: 'cover',
-                                    borderRadius: '12px',
+                                    borderRadius: '24px',
                                     justifySelf: 'center',
                                 }}
                             />
@@ -82,7 +82,7 @@ export default function SpeakerScreenTemplate({ data }) {
                         <Stack
                             sx={{
                                 minWidth: 0,
-                                gap: '16px',
+                                gap: '32px',
                                 pb: 8,
                             }}>
                             {speakerRole ? (
@@ -90,7 +90,7 @@ export default function SpeakerScreenTemplate({ data }) {
                                     component="p"
                                     sx={{
                                         fontFamily: '"Museo Sans Rounded"',
-                                        fontSize: '34.5px',
+                                        fontSize: '69px',
                                         fontWeight: 100,
                                         lineHeight: '150%',
                                         whiteSpace: 'pre-wrap',
@@ -105,7 +105,7 @@ export default function SpeakerScreenTemplate({ data }) {
                                     component="p"
                                     sx={{
                                         fontFamily: '"Museo Sans Rounded"',
-                                        fontSize: '48px',
+                                        fontSize: '96px',
                                         fontWeight: 300,
                                         lineHeight: '150%',
                                         whiteSpace: 'pre-wrap',
@@ -120,7 +120,7 @@ export default function SpeakerScreenTemplate({ data }) {
                                     component="p"
                                     sx={{
                                         fontFamily: '"Museo Sans Rounded"',
-                                        fontSize: '27px',
+                                        fontSize: '54px',
                                         fontWeight: 100,
                                         lineHeight: '95%',
                                         whiteSpace: 'pre-wrap',
@@ -166,8 +166,8 @@ export default function SpeakerScreenTemplate({ data }) {
                             src={eventLogoUrl}
                             alt={eventLogoAlt}
                             sx={{
-                                width: '301px',
-                                height: '290px',
+                                width: '602px',
+                                height: '580px',
                                 objectFit: 'contain',
                             }}
                         />

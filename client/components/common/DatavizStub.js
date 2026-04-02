@@ -4,8 +4,8 @@ import { Box, Typography } from '@mui/material';
 import { useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import MotionWrapper from './MotionWrapper';
 
-const ROW_HEIGHT = 52;
-const LINE_GAP = 8;
+const ROW_HEIGHT = 104;
+const LINE_GAP = 16;
 
 const MIN_RX_FRAC = 0.07;
 const MAX_RX_FRAC = 0.42;
@@ -97,7 +97,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
     const ry = discRy(rowIndex, rowCount, ROW_HEIGHT);
     const textY = Math.min(Math.max(0, textCenterY), safeH);
     const fill = DISC_FILLS[valueQuartileColorIndex(v, dataMin, dataMax)];
-    const dotR = 3;
+    const dotR = 6;
 
     const lineEnd = cx - rx;
     const lineStart = Math.min(lineStartX, lineEnd - 0.5);
@@ -127,7 +127,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
                     maxWidth: { xs: '46%', sm: '48%' },
                     pr: 1,
                     textAlign: 'left',
-                    fontSize: { xs: '13.5px', sm: '16.5px' },
+                    fontSize: { xs: '27px', sm: '33px' },
                     lineHeight: 1.25,
                 }}>
                 {row.text}
@@ -156,8 +156,8 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
                         x2={lineEnd}
                         y2={textY}
                         stroke="rgba(255,255,255,0.45)"
-                        strokeWidth={2}
-                        strokeDasharray="4 14"
+                        strokeWidth={4}
+                        strokeDasharray="8 28"
                         strokeLinecap="round"
                     />
                 ) : null}
@@ -190,7 +190,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
                             width="180%"
                             height="180%">
                             <feGaussianBlur
-                                stdDeviation="1.2"
+                                stdDeviation="2.4"
                                 result="b"
                             />
                             <feMerge>
@@ -206,7 +206,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
                         ry={ry}
                         fill={fill}
                         stroke="rgba(255,255,255,0.35)"
-                        strokeWidth={1}
+                        strokeWidth={2}
                         filter={`url(#${filterId})`}
                     />
                     <circle
@@ -243,8 +243,8 @@ export default function DatavizStub({ data }) {
             <Box
                 sx={{
                     width: '100%',
-                    maxWidth: '900px',
-                    minHeight: 'min(520px, 60vh)',
+                    maxWidth: '1800px',
+                    minHeight: 'min(1040px, 60vh)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -253,7 +253,7 @@ export default function DatavizStub({ data }) {
                 <Typography
                     variant="body1"
                     color="text.secondary"
-                    sx={{ opacity: 0.7, fontSize: { xs: '13.5px', sm: '16.5px' } }}>
+                    sx={{ opacity: 0.7, fontSize: { xs: '27px', sm: '33px' } }}>
                     No response data yet.
                 </Typography>
             </Box>
@@ -264,9 +264,9 @@ export default function DatavizStub({ data }) {
         <Box
             sx={{
                 width: '100%',
-                maxWidth: '960px',
+                maxWidth: '1920px',
                 mx: 'auto',
-                minHeight: 'min(520px, 60vh)',
+                minHeight: 'min(1040px, 60vh)',
                 px: { xs: 1, sm: 0 },
                 overflow: 'visible',
                 pt: 1,

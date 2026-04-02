@@ -31,7 +31,7 @@ export default function AgendaScreenTemplate({ data }) {
                 minHeight: '100vh',
                 px: 4,
                 py: 6,
-                pb: '400px',
+                pb: '800px',
                 position: 'relative',
             }}>
             <Stack
@@ -40,9 +40,9 @@ export default function AgendaScreenTemplate({ data }) {
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}>
-                <Box sx={{ maxWidth: '800px', width: '100%' }}>
+                <Box sx={{ maxWidth: '1600px', width: '100%' }}>
                     <Stack
-                        spacing="50px"
+                        spacing="100px"
                         sx={{ width: '100%' }}>
                         <Typography
                             variant="h2"
@@ -58,7 +58,7 @@ export default function AgendaScreenTemplate({ data }) {
                             <Typography
                                 sx={{
                                     width: '100%',
-                                    fontSize: '32px',
+                                    fontSize: '64px',
                                     fontWeight: 300,
                                 }}>
                                 {dateHeading}
@@ -74,7 +74,7 @@ export default function AgendaScreenTemplate({ data }) {
                                                 sx={{
                                                     display: 'flex',
                                                     alignItems: 'flex-start',
-                                                    gap: '55px',
+                                                    gap: '110px',
                                                     py: 1,
                                                     background:
                                                         idx === activeIndex
@@ -83,8 +83,8 @@ export default function AgendaScreenTemplate({ data }) {
                                                 }}>
                                                 <Typography
                                                     sx={{
-                                                        width: '200px',
-                                                        fontSize: '24px',
+                                                        width: '400px',
+                                                        fontSize: '48px',
                                                         fontWeight: 500,
                                                         flex: '0 0 auto',
                                                     }}>
@@ -92,7 +92,7 @@ export default function AgendaScreenTemplate({ data }) {
                                                 </Typography>
                                                 <Typography
                                                     sx={{
-                                                        fontSize: '24px',
+                                                        fontSize: '48px',
                                                         fontWeight: 300,
                                                         flex: '1 1 auto',
                                                         minWidth: 0,
@@ -113,7 +113,7 @@ export default function AgendaScreenTemplate({ data }) {
                                                     ease: 'easeOut',
                                                 }}
                                                 sx={{
-                                                    height: '2px',
+                                                    height: '4px',
                                                     width: '100%',
                                                     bgcolor: '#FFF',
                                                     transformOrigin: 'left',
@@ -144,8 +144,8 @@ export default function AgendaScreenTemplate({ data }) {
                             src={eventLogoUrl}
                             alt={eventLogoAlt}
                             sx={{
-                                width: '301px',
-                                height: '290px',
+                                width: '602px',
+                                height: '580px',
                                 objectFit: 'contain',
                             }}
                         />

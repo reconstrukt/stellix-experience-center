@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
 const darkTheme = createTheme({
+    spacing: 16,
     palette: {
         mode: 'dark',
         text: {
@@ -24,21 +25,26 @@ const darkTheme = createTheme({
             fontWeight: 700,
             letterSpacing: '-0.02em',
         },
+        h2: {
+            fontSize: '120px',
+            fontWeight: 300,
+            lineHeight: 1.167,
+        },
         h3: {
-            fontSize: '60px',
+            fontSize: '120px',
             fontWeight: 250,
-            lineHeight: '50px', // 83.333%
+            lineHeight: '100px',
         },
         h4: {
             color: '#FFF',
             fontFamily: '"Museo Sans Rounded"',
-            fontSize: '81px',
+            fontSize: '162px',
             fontWeight: 400,
         },
         h5: {
             color: '#FFF',
             fontFamily: '"Museo Sans Rounded"',
-            fontSize: '34px',
+            fontSize: '68px',
             fontStyle: 'normal',
             fontWeight: 250,
             lineHeight: '220%',
@@ -46,7 +52,7 @@ const darkTheme = createTheme({
         body1: {
             color: '#FFF',
             fontFamily: '"Museo Sans Rounded"',
-            fontSize: '24px',
+            fontSize: '48px',
             fontStyle: 'normal',
             fontWeight: 300,
             lineHeight: '150%',

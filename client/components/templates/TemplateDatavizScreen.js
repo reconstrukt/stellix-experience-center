@@ -68,7 +68,7 @@ export default function DatavizTemplate({ data }) {
                 width: '100%',
                 px: 4,
                 py: 6,
-                pb: '400px',
+                pb: '800px',
                 position: 'relative',
                 overflowX: 'hidden',
                 WebkitTextSizeAdjust: '100%',
@@ -82,8 +82,8 @@ export default function DatavizTemplate({ data }) {
                     minWidth: 0,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '60px',
-                    maxWidth: '1100px',
+                    gap: '120px',
+                    maxWidth: '2200px',
                     margin: '0 auto',
                 }}>
                 <MotionWrapper
@@ -127,8 +127,8 @@ export default function DatavizTemplate({ data }) {
                             src={eventLogoUrl}
                             alt={eventLogoAlt}
                             sx={{
-                                width: '301px',
-                                height: '290px',
+                                width: '602px',
+                                height: '580px',
                                 objectFit: 'contain',
                             }}
                         />

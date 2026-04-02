@@ -8,11 +8,11 @@ export default function MotionWrapper({ mounted, children, index = 0, ...props }
             component={motion.div}
             initial={{
                 opacity: 0,
-                y: 20,
+                y: 40,
             }}
             animate={{
                 opacity: mounted ? 1 : 0,
-                y: mounted ? 0 : -20,
+                y: mounted ? 0 : -40,
             }}
             transition={{
                 delay: index * 0.05,

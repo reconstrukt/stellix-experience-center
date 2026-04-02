@@ -16,12 +16,12 @@ export default function WelcomeScreenTemplate({ data }) {
                 minHeight: '100vh',
                 px: 4,
                 py: 6,
-                pb: '250px',
+                pb: '500px',
                 position: 'relative',
             }}>
             <Stack
                 spacing={3}
-                sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: '100px' }}>
+                sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: '200px' }}>
                 <MotionWrapper
                     mounted={true}
                     index={0}>
@@ -44,9 +44,9 @@ export default function WelcomeScreenTemplate({ data }) {
                             src={centerImageUrl}
                             alt={centerImageAlt}
                             sx={{
-                                width: 'min(520px, 90vw)',
+                                width: 'min(1040px, 90vw)',
                                 height: 'auto',
-                                maxHeight: '400px',
+                                maxHeight: '800px',
                                 objectFit: 'contain',
                             }}
                         />
@@ -79,8 +79,8 @@ export default function WelcomeScreenTemplate({ data }) {
                             src={eventLogoUrl}
                             alt={eventLogoAlt}
                             sx={{
-                                width: '301px',
-                                height: '290px',
+                                width: '602px',
+                                height: '580px',
                                 objectFit: 'contain',
                             }}
                         />

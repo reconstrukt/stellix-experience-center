@@ -23,7 +23,7 @@ export default function Time({ locale = 'en-US', updateIntervalMs = 1000, sx, ..
             sx={{
                 color: '#FFF',
                 textAlign: 'right',
-                fontSize: '20px',
+                fontSize: '40px',
                 fontWeight: 250,
                 ...sx,
             }}

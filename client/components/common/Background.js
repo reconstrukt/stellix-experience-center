@@ -42,8 +42,8 @@ function Background({ children }) {
             <Box
                 sx={{
                     position: 'fixed',
-                    top: '32px',
-                    right: '40px',
+                    top: '64px',
+                    right: '80px',
                 }}>
                 <Time />
             </Box>
