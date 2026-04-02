@@ -2,11 +2,34 @@ import { Box, Stack, Typography } from '@mui/material';
 import { toHttpsUrl } from '@/client/lib/url';
 import DatavizStub from '../common/DatavizStub';
 import MotionWrapper from '../common/MotionWrapper';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { getDataviz } from '@/client/lib/api';
 
 export default function DatavizTemplate({ data }) {
-    const title = data?.fields?.title ?? '';
     const eventLogoUrl = toHttpsUrl(data?.fields?.eventLogo?.fields?.file?.url);
     const eventLogoAlt = data?.fields?.eventLogo?.fields?.title ?? 'Event logo';
+
+    const [title, setTitle] = useState(null);
+    const [answers, setAnswers] = useState(null);
+
+    useEffect(() => {
+        getDataviz()
+            .then(({ data }) => {
+                if (data?.length > 1) {
+                    setTitle(data[1]?.question);
+                    setAnswers(
+                        data[1]?.answers?.map(answer => ({
+                            text: answer.answer,
+                            value: answer.total_responses,
+                        })),
+                    );
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
 
     return (
         <Stack
@@ -52,11 +75,7 @@ export default function DatavizTemplate({ data }) {
                     ) : null}
                 </MotionWrapper>
 
-                <MotionWrapper
-                    mounted={true}
-                    index={2}>
-                    <DatavizStub />
-                </MotionWrapper>
+                <DatavizStub data={answers} />
             </Stack>
 
             {eventLogoUrl ? (
