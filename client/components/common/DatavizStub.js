@@ -12,6 +12,10 @@ const MAX_RX_FRAC = 0.42;
 
 const DISC_FILLS = ['#E0B03C', '#92C83E', '#33B2C1', '#3B4752'];
 
+/** Top-3 label pill (Figma node 2:42 — Welcome Screen Templates) */
+const RANK_LABEL_BG = '#E2E2E2';
+const RANK_LABEL_TEXT = '#000000';
+
 /**
  * Map value to a quartile band on [min, max]: top 25% → 0, …, bottom 25% → 3.
  * Same numeric value always yields the same index.
@@ -53,13 +57,15 @@ function normalizeData(data) {
     return data.filter(d => d && typeof d.text === 'string' && Number.isFinite(Number(d.value)));
 }
 
-function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
+function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) {
+    const textRight = rank != null;
     const rowRef = useRef(null);
     const textRef = useRef(null);
     const filterId = `dvz-glow-${useId().replace(/:/g, '')}`;
     const [rowW, setRowW] = useState(0);
     const [rowH, setRowH] = useState(ROW_HEIGHT);
-    const [lineStartX, setLineStartX] = useState(0);
+    const [lineX1, setLineX1] = useState(0);
+    const [lineX2, setLineX2] = useState(0);
     const [textCenterY, setTextCenterY] = useState(ROW_HEIGHT / 2);
 
     useLayoutEffect(() => {
@@ -72,14 +78,29 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
             const textRect = textEl.getBoundingClientRect();
             const bl = rowEl.clientLeft;
             const bt = rowEl.clientTop;
-            // Same origin as position:absolute; left:0; top:0 — padding edge of the row
-            const rightOfText = textRect.right - rowRect.left - bl;
-            const startX = rightOfText + LINE_GAP;
+            const safeW = rowEl.clientWidth || rowRect.width;
+            const v = Number(row.value);
+            const rx = safeW * (MIN_RX_FRAC + (v / maxValue) * (MAX_RX_FRAC - MIN_RX_FRAC));
+            const cx = safeW / 2;
+
+            let x1;
+            let x2;
+            if (textRight) {
+                const leftOfText = textRect.left - rowRect.left - bl;
+                // Disc-side endpoint at horizontal center (not ellipse edge)
+                x1 = cx;
+                x2 = leftOfText - LINE_GAP;
+            } else {
+                const rightOfText = textRect.right - rowRect.left - bl;
+                x1 = rightOfText + LINE_GAP;
+                x2 = cx;
+            }
             const centerY = textRect.top + textRect.height / 2 - rowRect.top - bt;
 
-            setRowW(rowEl.clientWidth || rowRect.width);
+            setRowW(safeW);
             setRowH(Math.max(ROW_HEIGHT, rowEl.offsetHeight));
-            setLineStartX(Number.isFinite(startX) ? startX : 0);
+            setLineX1(Number.isFinite(x1) ? x1 : 0);
+            setLineX2(Number.isFinite(x2) ? x2 : 0);
             setTextCenterY(Number.isFinite(centerY) ? centerY : rowEl.clientHeight / 2);
         };
         measure();
@@ -87,7 +108,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
         ro.observe(rowEl);
         ro.observe(textEl);
         return () => ro.disconnect();
-    }, [row.text]);
+    }, [row.text, row.value, maxValue, textRight, rank]);
 
     const safeW = Math.max(rowW, 1);
     const safeH = Math.max(rowH, ROW_HEIGHT);
@@ -99,9 +120,9 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
     const fill = DISC_FILLS[valueQuartileColorIndex(v, dataMin, dataMax)];
     const dotR = 6;
 
-    const lineEnd = cx - rx;
-    const lineStart = Math.min(lineStartX, lineEnd - 0.5);
-    const showLine = lineStart < lineEnd;
+    const lineLeft = Math.min(lineX1, lineX2);
+    const lineRight = Math.max(lineX1, lineX2);
+    const showLine = lineRight - lineLeft > 0.5;
 
     const discW = 2 * rx;
     const discH = 2 * ry;
@@ -116,22 +137,87 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
                 py: 0.5,
                 overflow: 'visible',
             }}>
-            <Typography
-                ref={textRef}
-                variant="body1"
-                sx={{
-                    position: 'relative',
-                    zIndex: 2,
-                    display: 'inline-block',
-                    verticalAlign: 'top',
-                    maxWidth: { xs: '46%', sm: '48%' },
-                    pr: 1,
-                    textAlign: 'left',
-                    fontSize: { xs: '27px', sm: '33px' },
-                    lineHeight: 1.25,
-                }}>
-                {row.text}
-            </Typography>
+            {rank != null ? (
+                <Box
+                    sx={{
+                        position: 'relative',
+                        zIndex: 3,
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        width: '100%',
+                    }}>
+                    <Box
+                        ref={textRef}
+                        sx={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: { xs: '14px', sm: '16.65px' },
+                            width: 'fit-content',
+                            maxWidth: '100%',
+                            boxSizing: 'border-box',
+                            px: '21.5px',
+                            py: '21.5px',
+                            borderRadius: '46px',
+                            backgroundColor: RANK_LABEL_BG,
+                        }}>
+                        <Box
+                            sx={{
+                                width: { xs: 44, sm: 52 },
+                                height: { xs: 44, sm: 52 },
+                                borderRadius: '50%',
+                                bgcolor: DISC_FILLS[rank - 1],
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                            }}>
+                            <Typography
+                                component="span"
+                                sx={{
+                                    color: RANK_LABEL_TEXT,
+                                    fontWeight: 500,
+                                    fontSize: { xs: '26px', sm: '30px' },
+                                    lineHeight: 1,
+                                }}>
+                                {rank}
+                            </Typography>
+                        </Box>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                color: RANK_LABEL_TEXT,
+                                fontWeight: 500,
+                                textAlign: 'left',
+                                flex: '0 1 auto',
+                                minWidth: 0,
+                                fontSize: { xs: '27px', sm: '35px' },
+                                lineHeight: 1.25,
+                                overflowWrap: 'break-word',
+                            }}>
+                            {row.text}
+                        </Typography>
+                    </Box>
+                </Box>
+            ) : (
+                <Typography
+                    ref={textRef}
+                    variant="body1"
+                    sx={{
+                        position: 'relative',
+                        zIndex: 3,
+                        display: 'inline-block',
+                        verticalAlign: 'top',
+                        maxWidth: '100%',
+                        width: 'fit-content',
+                        pr: 1,
+                        textAlign: 'left',
+                        fontSize: { xs: '27px', sm: '33px' },
+                        lineHeight: 1.25,
+                        overflowWrap: 'break-word',
+                    }}>
+                    {row.text}
+                </Typography>
+            )}
 
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -145,19 +231,19 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
                     display: 'block',
                     pointerEvents: 'none',
                     overflow: 'visible',
-                    zIndex: 1,
+                    zIndex: 2,
                 }}
                 viewBox={`0 0 ${safeW} ${safeH}`}
                 preserveAspectRatio="none">
                 {showLine ? (
                     <line
-                        x1={lineStart}
+                        x1={lineX1}
                         y1={textY}
-                        x2={lineEnd}
+                        x2={lineX2}
                         y2={textY}
                         stroke="rgba(255,255,255,0.45)"
                         strokeWidth={4}
-                        strokeDasharray="8 28"
+                        strokeDasharray="4 24"
                         strokeLinecap="round"
                     />
                 ) : null}
@@ -238,6 +324,18 @@ export default function DatavizStub({ data }) {
         };
     }, [rows]);
 
+    /** Map row index → 1, 2, or 3 by value rank (stable sort by original index on ties). */
+    const topThreeRankByIndex = useMemo(() => {
+        if (rows.length === 0) return new Map();
+        const indexed = rows.map((row, i) => ({ i, v: Number(row.value) }));
+        indexed.sort((a, b) => b.v - a.v || a.i - b.i);
+        const map = new Map();
+        indexed.slice(0, Math.min(3, indexed.length)).forEach((entry, rankIdx) => {
+            map.set(entry.i, rankIdx + 1);
+        });
+        return map;
+    }, [rows]);
+
     if (rows.length === 0) {
         return (
             <Box
@@ -290,6 +388,7 @@ export default function DatavizStub({ data }) {
                             maxValue={maxValue}
                             dataMin={dataMin}
                             dataMax={dataMax}
+                            rank={topThreeRankByIndex.get(i)}
                         />
                     </MotionWrapper>
                 </Box>
