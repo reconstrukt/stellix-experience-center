@@ -106,8 +106,6 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
     const discW = 2 * rx;
     const discH = 2 * ry;
 
-    const stackZ = rowStackZIndex(rowIndex, rowCount);
-
     return (
         <Box
             ref={rowRef}
@@ -117,7 +115,6 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
                 minHeight: ROW_HEIGHT,
                 py: 0.5,
                 overflow: 'visible',
-                zIndex: stackZ,
             }}>
             <Typography
                 ref={textRef}
@@ -276,19 +273,26 @@ export default function DatavizStub({ data }) {
                 pb: 2,
             }}>
             {rows.map((row, i) => (
-                <MotionWrapper
+                <Box
                     key={`${row.text}-${i}`}
-                    mounted={true}
-                    index={i}>
-                    <DiscRow
-                        row={row}
-                        rowIndex={i}
-                        rowCount={rows.length}
-                        maxValue={maxValue}
-                        dataMin={dataMin}
-                        dataMax={dataMax}
-                    />
-                </MotionWrapper>
+                    sx={{
+                        position: 'relative',
+                        zIndex: rowStackZIndex(i, rows.length),
+                        width: '100%',
+                    }}>
+                    <MotionWrapper
+                        mounted={true}
+                        index={i}>
+                        <DiscRow
+                            row={row}
+                            rowIndex={i}
+                            rowCount={rows.length}
+                            maxValue={maxValue}
+                            dataMin={dataMin}
+                            dataMax={dataMax}
+                        />
+                    </MotionWrapper>
+                </Box>
             ))}
         </Box>
     );
