@@ -4,7 +4,8 @@ import MotionWrapper from '../common/MotionWrapper';
 
 export default function WelcomeScreenTemplate({ data }) {
     const title = data?.fields?.title ?? '';
-    const bottomLogo = Boolean(data?.fields?.bottomLogo);
+    const eventLogoUrl = toHttpsUrl(data?.fields?.eventLogo?.fields?.file?.url);
+    const eventLogoAlt = data?.fields?.eventLogo?.fields?.title ?? 'Event logo';
     const centerImageUrl = toHttpsUrl(data?.fields?.centerImage?.fields?.file?.url);
     const centerImageAlt = data?.fields?.centerImage?.fields?.title ?? title ?? 'Welcome';
     const centerText = data?.fields?.centerText ?? '';
@@ -62,24 +63,25 @@ export default function WelcomeScreenTemplate({ data }) {
                 </MotionWrapper>
             </Stack>
 
-            {bottomLogo ? (
+            {eventLogoUrl ? (
                 <Box
                     sx={{
                         position: 'absolute',
                         left: '50%',
                         transform: 'translateX(-50%)',
-                        bottom: '100px',
+                        bottom: '0px',
                     }}>
                     <MotionWrapper
                         mounted={true}
                         index={4}>
                         <Box
                             component="img"
-                            src="/stellix-logo-white.svg"
-                            alt="Stellix"
+                            src={eventLogoUrl}
+                            alt={eventLogoAlt}
                             sx={{
                                 width: '301px',
-                                height: '109px',
+                                height: '290px',
+                                objectFit: 'contain',
                             }}
                         />
                     </MotionWrapper>
