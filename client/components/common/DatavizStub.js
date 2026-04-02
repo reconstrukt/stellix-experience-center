@@ -2,6 +2,7 @@
 
 import { Box, Typography } from '@mui/material';
 import { useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import MotionWrapper from './MotionWrapper';
 
 const ROW_HEIGHT = 52;
 const LINE_GAP = 8;
@@ -275,15 +276,19 @@ export default function DatavizStub({ data }) {
                 pb: 2,
             }}>
             {rows.map((row, i) => (
-                <DiscRow
+                <MotionWrapper
                     key={`${row.text}-${i}`}
-                    row={row}
-                    rowIndex={i}
-                    rowCount={rows.length}
-                    maxValue={maxValue}
-                    dataMin={dataMin}
-                    dataMax={dataMax}
-                />
+                    mounted={true}
+                    index={i}>
+                    <DiscRow
+                        row={row}
+                        rowIndex={i}
+                        rowCount={rows.length}
+                        maxValue={maxValue}
+                        dataMin={dataMin}
+                        dataMax={dataMax}
+                    />
+                </MotionWrapper>
             ))}
         </Box>
     );
