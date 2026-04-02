@@ -5,6 +5,7 @@ import EventScreenTemplate from '@/client/components/templates/TemplateEventScre
 import AgendaScreenTemplate from '@/client/components/templates/TemplateAgendaScreen';
 import SpeakerScreenTemplate from '@/client/components/templates/TemplateSpeakerScreen';
 import FullScreenMediaTemplate from '@/client/components/templates/TemplateFullScreenMedia';
+import DatavizTemplate from '@/client/components/templates/TemplateDatavizScreen';
 
 const CONTENT_TYPE_TO_TEMPLATE = {
     welcomeScreen: WelcomeScreenTemplate,
@@ -12,6 +13,7 @@ const CONTENT_TYPE_TO_TEMPLATE = {
     agendaScreen: AgendaScreenTemplate,
     speakerInfo: SpeakerScreenTemplate,
     fullScreenMedia: FullScreenMediaTemplate,
+    dataviz: DatavizTemplate,
 };
 
 function TemplateResolver({ entryId, data, fallback = null }) {
