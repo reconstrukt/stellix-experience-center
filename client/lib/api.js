@@ -4,7 +4,11 @@ const apiUrl = API_CONFIG.URL;
 const apikey = API_CONFIG.KEY;
 
 const fetchApi = async (endpoint, options = {}) => {
-    const response = await fetch(`${apiUrl}${endpoint}?apikey=${apikey}`, {
+    const params = new URLSearchParams({
+        apikey,
+        ...options.params,
+    });
+    const response = await fetch(`${apiUrl}${endpoint}?${params}`, {
         ...options,
         headers: {
             'Content-Type': 'application/json',
@@ -27,6 +31,10 @@ export const getQuestions = () => {
     return fetchApi('/questionnaire');
 };
 
-export const getDataviz = () => {
-    return fetchApi('/dataviz');
+export const getDataviz = questionnaireId => {
+    return fetchApi('/dataviz', {
+        params: {
+            questionnaireId,
+        },
+    });
 };
