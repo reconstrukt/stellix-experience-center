@@ -9,16 +9,26 @@ const LINE_GAP = 8;
 const MIN_RX_FRAC = 0.07;
 const MAX_RX_FRAC = 0.42;
 
-const DISC_FILLS = [
-    'rgba(72, 189, 175, 0.72)',
-    'rgba(212, 184, 92, 0.72)',
-    'rgba(138, 198, 96, 0.72)',
-    'rgba(118, 156, 178, 0.72)',
-];
+const DISC_FILLS = ['#E0B03C', '#92C83E', '#33B2C1', '#3B4752'];
+
+/**
+ * Map value to a quartile band on [min, max]: top 25% → 0, …, bottom 25% → 3.
+ * Same numeric value always yields the same index.
+ */
+function valueQuartileColorIndex(value, minVal, maxVal) {
+    if (maxVal === minVal) {
+        return 3;
+    }
+    const t = (value - minVal) / (maxVal - minVal);
+    if (t >= 0.75) return 0;
+    if (t >= 0.5) return 1;
+    if (t >= 0.25) return 2;
+    return 3;
+}
 
 function discRy(rowIndex, rowCount, rowHeight) {
     const ryMin = rowHeight * 0.09;
-    const ryMax = rowHeight * 0.44;
+    const ryMax = rowHeight * 1;
     if (rowCount <= 1) {
         return rowHeight * 0.28;
     }
@@ -27,12 +37,22 @@ function discRy(rowIndex, rowCount, rowHeight) {
     return ryMin + dist * (ryMax - ryMin);
 }
 
+/** Middle rows on top, edge rows behind — matches perspective (front vs back). */
+function rowStackZIndex(rowIndex, rowCount) {
+    if (rowCount <= 1) {
+        return 1;
+    }
+    const mid = (rowCount - 1) / 2;
+    const dist = Math.abs(rowIndex - mid) / mid;
+    return Math.round((1 - dist) * 100);
+}
+
 function normalizeData(data) {
     if (!Array.isArray(data)) return [];
     return data.filter(d => d && typeof d.text === 'string' && Number.isFinite(Number(d.value)));
 }
 
-function DiscRow({ row, rowIndex, rowCount, maxValue }) {
+function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax }) {
     const rowRef = useRef(null);
     const textRef = useRef(null);
     const filterId = `dvz-glow-${useId().replace(/:/g, '')}`;
@@ -75,7 +95,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue }) {
     const rx = safeW * (MIN_RX_FRAC + (v / maxValue) * (MAX_RX_FRAC - MIN_RX_FRAC));
     const ry = discRy(rowIndex, rowCount, ROW_HEIGHT);
     const textY = Math.min(Math.max(0, textCenterY), safeH);
-    const fill = DISC_FILLS[rowIndex % DISC_FILLS.length];
+    const fill = DISC_FILLS[valueQuartileColorIndex(v, dataMin, dataMax)];
     const dotR = 3;
 
     const lineEnd = cx - rx;
@@ -84,6 +104,8 @@ function DiscRow({ row, rowIndex, rowCount, maxValue }) {
 
     const discW = 2 * rx;
     const discH = 2 * ry;
+
+    const stackZ = rowStackZIndex(rowIndex, rowCount);
 
     return (
         <Box
@@ -94,6 +116,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue }) {
                 minHeight: ROW_HEIGHT,
                 py: 0.5,
                 overflow: 'visible',
+                zIndex: stackZ,
             }}>
             <Typography
                 ref={textRef}
@@ -203,9 +226,18 @@ function DiscRow({ row, rowIndex, rowCount, maxValue }) {
 export default function DatavizStub({ data }) {
     const rows = useMemo(() => normalizeData(data), [data]);
 
-    const maxValue = useMemo(() => {
-        if (rows.length === 0) return 1;
-        return Math.max(1, ...rows.map(r => Number(r.value)));
+    const { maxValue, dataMin, dataMax } = useMemo(() => {
+        if (rows.length === 0) {
+            return { maxValue: 1, dataMin: 0, dataMax: 0 };
+        }
+        const nums = rows.map(r => Number(r.value));
+        const lo = Math.min(...nums);
+        const hi = Math.max(...nums);
+        return {
+            maxValue: Math.max(1, hi),
+            dataMin: lo,
+            dataMax: hi,
+        };
     }, [rows]);
 
     if (rows.length === 0) {
@@ -249,6 +281,8 @@ export default function DatavizStub({ data }) {
                     rowIndex={i}
                     rowCount={rows.length}
                     maxValue={maxValue}
+                    dataMin={dataMin}
+                    dataMax={dataMax}
                 />
             ))}
         </Box>
