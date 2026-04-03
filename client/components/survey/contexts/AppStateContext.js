@@ -6,6 +6,7 @@ const AppStateContext = createContext();
 export const AppStateProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [content, setContent] = useState(null);
+    const [cmsid, setCmsid] = useState(null);
     const [loadError, setLoadError] = useState(false);
 
     const [currentStep, setCurrentStep] = useState(0); // 0 | 1 | 2 | 3 | 4
@@ -35,20 +36,26 @@ export const AppStateProvider = ({ children }) => {
             try {
                 const data = await getQuestions();
                 const questions = data?.data?.questions;
+                const id = data?.data?.cmsid;
 
                 if (
                     data?.success &&
+                    typeof id === 'string' &&
+                    id.length > 0 &&
                     Array.isArray(questions) &&
                     questions.length >= 2
                 ) {
                     setContent(questions);
+                    setCmsid(id);
                     setLoadError(false);
                 } else {
                     setContent(null);
+                    setCmsid(null);
                     setLoadError(true);
                 }
             } catch {
                 setContent(null);
+                setCmsid(null);
                 setLoadError(true);
             } finally {
                 setLoading(false);
@@ -68,6 +75,7 @@ export const AppStateProvider = ({ children }) => {
 
                 loading,
                 content,
+                cmsid,
                 loadError,
             }}
         >

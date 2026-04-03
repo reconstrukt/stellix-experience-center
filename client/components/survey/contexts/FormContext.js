@@ -5,12 +5,12 @@ import useAppState from './AppStateContext';
 const FormContext = createContext();
 
 export const FormProvider = ({ children }) => {
-    const { content } = useAppState();
+    const { content, cmsid } = useAppState();
     const [answerOne, setAnswerOne] = useState([]);
     const [answerTwo, setAnswerTwo] = useState([]);
 
     const postData = async () => {
-        if (!content?.[0] || !content?.[1]) {
+        if (!content?.[0] || !content?.[1] || !cmsid) {
             return;
         }
 
@@ -22,6 +22,7 @@ export const FormProvider = ({ children }) => {
             a1: answerOne,
             q2: content[1].prompt,
             a2: answerTwo,
+            cmsid,
         });
         console.log('API RESPONSE', data);
 
@@ -30,15 +31,10 @@ export const FormProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        if (
-            answerOne.length > 0 &&
-            answerTwo.length > 0 &&
-            content?.[0] &&
-            content?.[1]
-        ) {
+        if (answerOne.length > 0 && answerTwo.length > 0 && content?.[0] && content?.[1]) {
             postData();
         }
-    }, [answerOne, answerTwo, content]);
+    }, [answerOne, answerTwo, content, cmsid]);
 
     return (
         <FormContext.Provider
@@ -46,8 +42,7 @@ export const FormProvider = ({ children }) => {
                 setAnswerOne,
                 setAnswerTwo,
                 postData,
-            }}
-        >
+            }}>
             {children}
         </FormContext.Provider>
     );
