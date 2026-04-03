@@ -1,3 +1,35 @@
+/* Survey sunrise layer: registered so % values interpolate when transitioned */
+@property --survey-sunrise-width {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 120%;
+}
+@property --survey-sunrise-height {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+}
+@property --survey-sunrise-yellow-low {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 10.5%;
+}
+@property --survey-sunrise-yellow-high {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 15.6%;
+}
+@property --survey-sunrise-teal-low {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 26.4%;
+}
+@property --survey-sunrise-teal-high {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 39.7%;
+}
+
 @font-face {
     font-family: 'Museo Sans Rounded';
     src: url('/fonts/MuseoSansRounded300.woff2') format('woff2');

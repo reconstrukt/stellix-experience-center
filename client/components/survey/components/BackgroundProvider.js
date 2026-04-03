@@ -59,6 +59,15 @@ export default function BackgroundProvider() {
 
     const transitionDuration = bgStep === 4 ? '4s' : '2s';
 
+    const sunriseTransitionProps = [
+        '--survey-sunrise-width',
+        '--survey-sunrise-height',
+        '--survey-sunrise-yellow-low',
+        '--survey-sunrise-yellow-high',
+        '--survey-sunrise-teal-low',
+        '--survey-sunrise-teal-high',
+    ].join(', ');
+
     return (
         <Box
             sx={{
@@ -67,8 +76,7 @@ export default function BackgroundProvider() {
                 left: 0,
                 width: '100vw',
                 height: '100vh',
-            }}
-        >
+            }}>
             {/* LOWEST LAYER */}
             <Box
                 sx={{
@@ -78,10 +86,7 @@ export default function BackgroundProvider() {
                     bottom: 0,
                     right: 0,
                     transition: `background-color ${transitionDuration} ease`,
-                    backgroundColor:
-                        bgStep === 0 || bgStep === 1 || bgStep === 4
-                            ? palette.black
-                            : palette.offWhite,
+                    backgroundColor: bgStep === 0 || bgStep === 1 || bgStep === 4 ? palette.black : palette.offWhite,
                 }}
             />
 
@@ -92,8 +97,7 @@ export default function BackgroundProvider() {
                     left: 0,
                     bottom: 0,
                     right: 0,
-                    background:
-                        'linear-gradient(180deg, #3B4752 1.79%, transparent 95%)',
+                    background: 'linear-gradient(180deg, #3B4752 1.79%, transparent 95%)',
                 }}
             />
 
@@ -110,16 +114,14 @@ export default function BackgroundProvider() {
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                }}
-            >
+                }}>
                 {Array.from({ length: 5 }).map((row, rowIndex) => (
                     <Box
                         key={rowIndex}
                         sx={{
                             display: 'flex',
                             justifyContent: 'space-between',
-                        }}
-                    >
+                        }}>
                         {Array.from({ length: 3 }).map((dot, i) => (
                             <Box
                                 key={i}
@@ -146,29 +148,22 @@ export default function BackgroundProvider() {
 
                     // opacity: bgStep === 0 || bgStep === 4 ? 0 : 1,
 
-                    transition: `
-                        opacity 1s ease,
-                        --bg-width ${transitionDuration} ease, 
-                        --bg-height ${transitionDuration} ease,
-                        --bg-yellow-low ${transitionDuration} ease, 
-                        --bg-yellow-high ${transitionDuration} ease, 
-                        --bg-teal-low ${transitionDuration} ease, 
-                        --bg-teal-high ${transitionDuration} ease
-                    `,
+                    transitionProperty: sunriseTransitionProps,
+                    transitionDuration: transitionDuration,
+                    transitionTimingFunction: 'ease',
 
-                    '--bg-width': currentGradient.width,
-                    '--bg-height': currentGradient.height,
-                    '--bg-yellow-low': currentGradient.yellowLow,
-                    '--bg-yellow-high': currentGradient.yellowHigh,
-                    '--bg-teal-low': currentGradient.tealLow,
-                    '--bg-teal-high': currentGradient.tealHigh,
+                    '--survey-sunrise-width': currentGradient.width,
+                    '--survey-sunrise-height': currentGradient.height,
+                    '--survey-sunrise-yellow-low': currentGradient.yellowLow,
+                    '--survey-sunrise-yellow-high': currentGradient.yellowHigh,
+                    '--survey-sunrise-teal-low': currentGradient.tealLow,
+                    '--survey-sunrise-teal-high': currentGradient.tealHigh,
 
                     background: `radial-gradient(
-                            var(--bg-width) var(--bg-height) at bottom, 
-                          #E0B03C var(--bg-yellow-low), rgba(224, 176, 60, 0.8) var(--bg-yellow-high), 
-                            rgba(28, 189, 199, 0.5) var(--bg-teal-low), rgba(28, 189, 199, 0) var(--bg-teal-high))`,
-                }}
-            ></Box>
+                            var(--survey-sunrise-width) var(--survey-sunrise-height) at bottom, 
+                          #E0B03C var(--survey-sunrise-yellow-low), rgba(224, 176, 60, 0.8) var(--survey-sunrise-yellow-high), 
+                            rgba(28, 189, 199, 0.5) var(--survey-sunrise-teal-low), rgba(28, 189, 199, 0) var(--survey-sunrise-teal-high))`,
+                }}></Box>
         </Box>
     );
 }
