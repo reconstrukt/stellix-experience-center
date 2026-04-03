@@ -366,6 +366,16 @@ export default function DatavizStub({ data, questionIndex = 0, title }) {
 
     const showTitle = typeof title === 'string' && title.length > 0;
 
+    const gap = useMemo(() => {
+        if (rows.length < 10) {
+            return '70px';
+        } else if (rows.length < 15) {
+            return '35px';
+        } else {
+            return '0px';
+        }
+    }, [rows.length]);
+
     return (
         <Box
             sx={{
@@ -391,7 +401,7 @@ export default function DatavizStub({ data, questionIndex = 0, title }) {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        // gap: '120px',
+                        gap: gap,
                     }}>
                     {showTitle ? (
                         <Box

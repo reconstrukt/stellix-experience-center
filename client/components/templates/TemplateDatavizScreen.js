@@ -5,7 +5,7 @@ import MotionWrapper from '../common/MotionWrapper';
 import { useEffect, useState } from 'react';
 import { getDataviz } from '@/client/lib/api';
 
-const QUESTION_DISPLAY_MS = 5_000;
+const QUESTION_DISPLAY_MS = 30_000;
 
 export default function DatavizTemplate({ data }) {
     const eventLogoUrl = toHttpsUrl(data?.fields?.eventLogo?.fields?.file?.url);
