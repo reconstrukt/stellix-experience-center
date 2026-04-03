@@ -1,8 +1,37 @@
 'use client';
 
 import { Box, Typography } from '@mui/material';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import MotionWrapper from './MotionWrapper';
+
+const DATAVIZ_LIST_CONTAINER = {
+    initial: {},
+    animate: {
+        transition: {
+            staggerChildren: 0.05,
+        },
+    },
+    exit: {
+        transition: {
+            staggerChildren: 0.05,
+            staggerDirection: -1,
+        },
+    },
+};
+
+const DATAVIZ_ROW_ITEM = {
+    initial: { opacity: 0, y: 40 },
+    animate: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5, ease: 'easeOut' },
+    },
+    exit: {
+        opacity: 0,
+        y: -40,
+        transition: { duration: 0.5, ease: 'easeOut' },
+    },
+};
 
 const ROW_HEIGHT = 104;
 const LINE_GAP = 16;
@@ -307,7 +336,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
     );
 }
 
-export default function DatavizStub({ data }) {
+export default function DatavizStub({ data, questionIndex = 0, title }) {
     const rows = useMemo(() => normalizeData(data), [data]);
 
     const { maxValue, dataMin, dataMax } = useMemo(() => {
@@ -324,7 +353,6 @@ export default function DatavizStub({ data }) {
         };
     }, [rows]);
 
-    /** Map row index → 1, 2, or 3 by value rank (stable sort by original index on ties). */
     const topThreeRankByIndex = useMemo(() => {
         if (rows.length === 0) return new Map();
         const indexed = rows.map((row, i) => ({ i, v: Number(row.value) }));
@@ -336,27 +364,7 @@ export default function DatavizStub({ data }) {
         return map;
     }, [rows]);
 
-    if (rows.length === 0) {
-        return (
-            <Box
-                sx={{
-                    width: '100%',
-                    maxWidth: '1800px',
-                    minHeight: 'min(1040px, 60vh)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    px: 3,
-                }}>
-                <Typography
-                    variant="body1"
-                    color="text.secondary"
-                    sx={{ opacity: 0.7, fontSize: { xs: '27px', sm: '33px' } }}>
-                    No response data yet.
-                </Typography>
-            </Box>
-        );
-    }
+    const showTitle = typeof title === 'string' && title.length > 0;
 
     return (
         <Box
@@ -370,29 +378,87 @@ export default function DatavizStub({ data }) {
                 pt: 1,
                 pb: 2,
             }}>
-            {rows.map((row, i) => (
+            <AnimatePresence mode="wait">
                 <Box
-                    key={`${row.text}-${i}`}
+                    key={questionIndex}
+                    component={motion.div}
+                    variants={DATAVIZ_LIST_CONTAINER}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
                     sx={{
-                        position: 'relative',
-                        zIndex: rowStackZIndex(i, rows.length),
                         width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        // gap: '120px',
                     }}>
-                    <MotionWrapper
-                        mounted={true}
-                        index={i}>
-                        <DiscRow
-                            row={row}
-                            rowIndex={i}
-                            rowCount={rows.length}
-                            maxValue={maxValue}
-                            dataMin={dataMin}
-                            dataMax={dataMax}
-                            rank={topThreeRankByIndex.get(i)}
-                        />
-                    </MotionWrapper>
+                    {showTitle ? (
+                        <Box
+                            component={motion.div}
+                            variants={DATAVIZ_ROW_ITEM}
+                            sx={{ width: '100%', maxWidth: '100%', mb: '180px' }}>
+                            <Typography
+                                variant="h3"
+                                component="h1"
+                                sx={{
+                                    textAlign: 'center',
+                                    whiteSpace: 'pre-wrap',
+                                    maxWidth: '100%',
+                                    overflowWrap: 'anywhere',
+                                    wordBreak: 'break-word',
+                                }}>
+                                {title}
+                            </Typography>
+                        </Box>
+                    ) : null}
+
+                    {rows.length > 0 ? (
+                        rows.map((row, i) => (
+                            <Box
+                                key={`${i}-${row.text}`}
+                                component={motion.div}
+                                variants={DATAVIZ_ROW_ITEM}
+                                sx={{
+                                    position: 'relative',
+                                    zIndex: rowStackZIndex(i, rows.length),
+                                    width: '100%',
+                                }}>
+                                <DiscRow
+                                    row={row}
+                                    rowIndex={i}
+                                    rowCount={rows.length}
+                                    maxValue={maxValue}
+                                    dataMin={dataMin}
+                                    dataMax={dataMax}
+                                    rank={topThreeRankByIndex.get(i)}
+                                />
+                            </Box>
+                        ))
+                    ) : (
+                        <Box
+                            component={motion.div}
+                            variants={DATAVIZ_ROW_ITEM}
+                            sx={{
+                                width: '100%',
+                                maxWidth: '1800px',
+                                minHeight: showTitle ? undefined : 'min(1040px, 60vh)',
+                                mx: 'auto',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                px: 3,
+                            }}>
+                            <Typography
+                                variant="body1"
+                                color="text.secondary"
+                                sx={{ opacity: 0.7, fontSize: { xs: '27px', sm: '33px' } }}>
+                                No response data yet.
+                            </Typography>
+                        </Box>
+                    )}
                 </Box>
-            ))}
+            </AnimatePresence>
         </Box>
     );
 }

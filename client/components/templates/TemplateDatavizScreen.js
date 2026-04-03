@@ -1,11 +1,11 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { toHttpsUrl } from '@/client/lib/url';
 import DatavizStub from '../common/DatavizStub';
 import MotionWrapper from '../common/MotionWrapper';
 import { useEffect, useState } from 'react';
 import { getDataviz } from '@/client/lib/api';
 
-const QUESTION_DISPLAY_MS = 10_000;
+const QUESTION_DISPLAY_MS = 5_000;
 
 export default function DatavizTemplate({ data }) {
     const eventLogoUrl = toHttpsUrl(data?.fields?.eventLogo?.fields?.file?.url);
@@ -86,27 +86,9 @@ export default function DatavizTemplate({ data }) {
                     maxWidth: '2200px',
                     margin: '0 auto',
                 }}>
-                <MotionWrapper
-                    mounted={true}
-                    index={0}>
-                    {title ? (
-                        <Typography
-                            variant="h3"
-                            component="h1"
-                            sx={{
-                                textAlign: 'center',
-                                whiteSpace: 'pre-wrap',
-                                maxWidth: '100%',
-                                overflowWrap: 'anywhere',
-                                wordBreak: 'break-word',
-                            }}>
-                            {title}
-                        </Typography>
-                    ) : null}
-                </MotionWrapper>
-
                 <DatavizStub
-                    key={questionIndex}
+                    questionIndex={questionIndex}
+                    title={title}
                     data={answers}
                 />
             </Stack>

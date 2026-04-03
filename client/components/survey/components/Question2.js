@@ -15,24 +15,18 @@ export default function Question2() {
     const [selected, setSelected] = useState([]);
     const [out, setOut] = useState(false);
 
-    const questionPrompt = useMemo(
-        () => content?.[1]?.prompt ?? '',
-        [content]
-    );
-    const questionOptions = useMemo(
-        () => content?.[1]?.answers?.map((item) => item.title) ?? [],
-        [content]
-    );
+    const questionPrompt = useMemo(() => content?.[1]?.prompt ?? '', [content]);
+    const questionOptions = useMemo(() => content?.[1]?.answers?.map(item => item.title) ?? [], [content]);
 
     if (!content?.[1]) {
         return null;
     }
 
-    const handleSelect = (option) => {
+    const handleSelect = option => {
         if (selected.includes(option)) return;
         if (selected.length === 3) return;
 
-        setSelected((val) => {
+        setSelected(val => {
             const ret = [...val];
             ret.push(option);
             return ret;
@@ -61,20 +55,23 @@ export default function Question2() {
                 <Title>{questionPrompt}</Title>
             </MotionWrapper>
 
-            <MotionWrapper mounted={!out} index={1}>
+            <MotionWrapper
+                mounted={!out}
+                index={1}>
                 <Box
                     sx={{
                         mt: '20px',
                         fontSize: 30,
                         textAlign: 'center',
                         fontWeight: 400,
-                    }}
-                >
+                    }}>
                     Select and rank up to three
                 </Box>
             </MotionWrapper>
 
-            <MotionWrapper mounted={!out} index={2}>
+            <MotionWrapper
+                mounted={!out}
+                index={2}>
                 <Stack
                     sx={{
                         mt: '40px',
@@ -82,8 +79,7 @@ export default function Question2() {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         gap: '22px',
-                    }}
-                >
+                    }}>
                     {Array.from({ length: 3 }).map((field, index) => (
                         <Box
                             key={index}
@@ -102,13 +98,9 @@ export default function Question2() {
 
                                 transition: 'all 0.4s ease',
 
-                                backgroundColor:
-                                    selected.length > index
-                                        ? palette.teal
-                                        : palette.charcoal,
+                                backgroundColor: selected.length > index ? palette.teal : palette.charcoal,
                                 color: palette.black,
-                            }}
-                        >
+                            }}>
                             <Box
                                 sx={{
                                     position: 'absolute',
@@ -124,12 +116,8 @@ export default function Question2() {
                                     color: palette.black,
 
                                     transition: 'all 0.4s ease',
-                                    backgroundColor:
-                                        selected.length > index
-                                            ? palette.white
-                                            : palette.teal,
-                                }}
-                            >
+                                    backgroundColor: selected.length > index ? palette.white : palette.teal,
+                                }}>
                                 {index + 1}
                             </Box>
 
@@ -138,8 +126,7 @@ export default function Question2() {
                                     whiteSpace: 'nowrap',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
-                                }}
-                            >
+                                }}>
                                 {selected.length > index ? selected[index] : ''}
                             </Box>
                         </Box>
@@ -147,15 +134,16 @@ export default function Question2() {
                 </Stack>
             </MotionWrapper>
 
-            <MotionWrapper mounted={!out} index={3}>
+            <MotionWrapper
+                mounted={!out}
+                index={3}>
                 <Stack
                     direction="row"
                     justifyContent="center"
                     gap="14px"
                     sx={{
                         mt: '40px',
-                    }}
-                >
+                    }}>
                     <NextButton
                         onClick={handleClear}
                         sx={{
@@ -163,14 +151,12 @@ export default function Question2() {
                             border: `3px solid ${palette.charcoal}`,
                             color: palette.charcoal,
                             background: 'transparent',
-                        }}
-                    >
+                        }}>
                         Clear
                     </NextButton>
                     <NextButton
                         onClick={handleSubmit}
-                        disabled={selected.length === 0}
-                    >
+                        disabled={selected.length === 0}>
                         Submit
                     </NextButton>
                 </Stack>
@@ -185,11 +171,12 @@ export default function Question2() {
                     flexWrap: 'wrap',
                     gap: '24px 14px',
                     justifyContent: 'center',
-                }}
-            >
+                }}>
                 {questionOptions.map((option, index) => (
                     <Box key={index}>
-                        <MotionWrapper mounted={!out} index={4 + index}>
+                        <MotionWrapper
+                            mounted={!out}
+                            index={4 + index}>
                             <Button
                                 onClick={() => handleSelect(option)}
                                 sx={{
@@ -202,12 +189,9 @@ export default function Question2() {
                                     background: palette.offWhite,
                                     color: 'black',
 
-                                    opacity: selected.includes(option)
-                                        ? 0.4
-                                        : 1,
+                                    opacity: selected.includes(option) ? 0.4 : 1,
                                     transition: 'opacity 0.1s ease',
-                                }}
-                            >
+                                }}>
                                 {option}
                             </Button>
                         </MotionWrapper>
