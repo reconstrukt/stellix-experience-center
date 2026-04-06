@@ -35,7 +35,7 @@ export default function AgendaScreenTemplate({ data }) {
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}>
-                <Box sx={{ maxWidth: '1600px', width: '100%' }}>
+                <Box>
                     <Stack
                         spacing="100px"
                         sx={{ width: '100%' }}>
@@ -52,8 +52,9 @@ export default function AgendaScreenTemplate({ data }) {
                             <Typography
                                 sx={{
                                     width: '100%',
-                                    fontSize: '64px',
-                                    fontWeight: 300,
+                                    fontSize: '90px',
+                                    fontWeight: 100,
+                                    lineHeight: '120%',
                                 }}>
                                 {dateHeading}
                             </Typography>
@@ -63,30 +64,31 @@ export default function AgendaScreenTemplate({ data }) {
                             <Box sx={{ width: '100%' }}>
                                 {agendaItems.map((item, idx) => (
                                     <Box key={`${item.timeslot}-${idx}`}>
-                                        <Box py={2}>
+                                        <Box
+                                            sx={{
+                                                background:
+                                                    idx === activeIndex ? 'rgba(28, 189, 199, 0.30)' : 'transparent',
+                                                py: 2,
+                                            }}>
                                             <Box
                                                 sx={{
                                                     display: 'flex',
                                                     alignItems: 'flex-start',
                                                     gap: '110px',
                                                     py: 1,
-                                                    background:
-                                                        idx === activeIndex
-                                                            ? 'rgba(28, 189, 199, 0.30)'
-                                                            : 'transparent',
                                                 }}>
                                                 <Typography
                                                     sx={{
-                                                        width: '400px',
-                                                        fontSize: '48px',
-                                                        fontWeight: 500,
+                                                        width: '500px',
+                                                        fontSize: '64px',
+                                                        fontWeight: 400,
                                                         flex: '0 0 auto',
                                                     }}>
                                                     {item.timeslot}
                                                 </Typography>
                                                 <Typography
                                                     sx={{
-                                                        fontSize: '48px',
+                                                        fontSize: '64px',
                                                         fontWeight: 300,
                                                         flex: '1 1 auto',
                                                         minWidth: 0,

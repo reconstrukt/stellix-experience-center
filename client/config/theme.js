@@ -52,8 +52,7 @@ const darkTheme = createTheme({
         body1: {
             color: '#FFF',
             fontFamily: '"Museo Sans Rounded"',
-            fontSize: '48px',
-            fontStyle: 'normal',
+            fontSize: '64px',
             fontWeight: 300,
             lineHeight: '150%',
         },

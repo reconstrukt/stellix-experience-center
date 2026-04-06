@@ -23,7 +23,6 @@ export default function SpeakerScreenTemplate({ data }) {
                 sx={{
                     flex: 1,
                     width: '100%',
-                    maxWidth: '1500px',
                     margin: '0 auto',
                     gap: '112px',
                     justifyContent: 'center',
@@ -50,10 +49,8 @@ export default function SpeakerScreenTemplate({ data }) {
                     <Box
                         sx={{
                             display: 'grid',
-                            gridTemplateColumns: 'minmax(520px, 680px) minmax(0, 1fr)',
+                            gridTemplateColumns: '670px 1fr',
                             gap: '96px',
-                            alignItems: 'flex-end',
-                            width: '100%',
                         }}>
                         {speakerPhotoUrl ? (
                             <Box
@@ -62,10 +59,10 @@ export default function SpeakerScreenTemplate({ data }) {
                                 alt={speakerPhotoAlt}
                                 sx={{
                                     width: '100%',
-                                    maxWidth: '680px',
+                                    maxWidth: '722px',
+                                    aspectRatio: '3/4',
                                     height: 'auto',
                                     objectFit: 'cover',
-                                    borderRadius: '24px',
                                     justifySelf: 'center',
                                 }}
                             />
@@ -77,18 +74,16 @@ export default function SpeakerScreenTemplate({ data }) {
                             sx={{
                                 minWidth: 0,
                                 gap: '32px',
-                                pb: 8,
+                                justifyContent: 'center',
                             }}>
                             {speakerRole ? (
                                 <Typography
                                     component="p"
                                     sx={{
                                         fontFamily: '"Museo Sans Rounded"',
-                                        fontSize: '69px',
+                                        fontSize: '90px',
                                         fontWeight: 100,
-                                        lineHeight: '150%',
-                                        whiteSpace: 'pre-wrap',
-                                        overflowWrap: 'anywhere',
+                                        lineHeight: '120%',
                                     }}>
                                     {speakerRole}
                                 </Typography>
@@ -99,11 +94,9 @@ export default function SpeakerScreenTemplate({ data }) {
                                     component="p"
                                     sx={{
                                         fontFamily: '"Museo Sans Rounded"',
-                                        fontSize: '96px',
+                                        fontSize: '120px',
                                         fontWeight: 300,
-                                        lineHeight: '150%',
-                                        whiteSpace: 'pre-wrap',
-                                        overflowWrap: 'anywhere',
+                                        lineHeight: '120%',
                                     }}>
                                     {speakerName}
                                 </Typography>
@@ -114,11 +107,9 @@ export default function SpeakerScreenTemplate({ data }) {
                                     component="p"
                                     sx={{
                                         fontFamily: '"Museo Sans Rounded"',
-                                        fontSize: '54px',
+                                        fontSize: '90px',
                                         fontWeight: 100,
-                                        lineHeight: '95%',
-                                        whiteSpace: 'pre-wrap',
-                                        overflowWrap: 'anywhere',
+                                        lineHeight: '120%',
                                     }}>
                                     {speakerTitle}
                                 </Typography>

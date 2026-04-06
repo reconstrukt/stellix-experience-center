@@ -12,9 +12,10 @@ export default function TemplateScreenStack({
             sx={{
                 minHeight: '100vh',
                 width: '100%',
-                px: 4,
                 py: 6,
                 pb: '800px',
+                maxWidth: '1600px',
+                margin: '0 auto',
                 position: 'relative',
                 overflowX: 'hidden',
             }}>

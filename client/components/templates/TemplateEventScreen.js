@@ -24,7 +24,6 @@ export default function EventScreenTemplate({ data }) {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '120px',
-                    maxWidth: '1400px',
                     margin: '0 auto',
                 }}>
                 {eyebrowText ? (
@@ -44,9 +43,9 @@ export default function EventScreenTemplate({ data }) {
                             sx={{
                                 textAlign: 'center',
                                 whiteSpace: 'pre-wrap', // preserve newlines
-                                maxWidth: '100%',
-                                overflowWrap: 'anywhere',
-                                wordBreak: 'break-word',
+                                fontSize: '230px',
+                                fontWeight: 300,
+                                lineHeight: '100%',
                             }}>
                             {title}
                         </Typography>
@@ -61,9 +60,8 @@ export default function EventScreenTemplate({ data }) {
                             variant="h5"
                             sx={{
                                 textAlign: 'center',
-                                maxWidth: '100%',
-                                overflowWrap: 'anywhere',
-                                wordBreak: 'break-word',
+                                fontSize: '90px',
+                                lineHeight: '120%',
                             }}>
                             {subtitle}
                         </Typography>
