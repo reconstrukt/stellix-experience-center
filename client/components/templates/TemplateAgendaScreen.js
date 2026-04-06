@@ -40,8 +40,7 @@ export default function AgendaScreenTemplate({ data }) {
                         spacing="100px"
                         sx={{ width: '100%' }}>
                         <Typography
-                            variant="h2"
-                            component="h1"
+                            variant="h3"
                             sx={{
                                 width: '100%',
                                 textAlign: 'center',
