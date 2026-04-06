@@ -19,9 +19,9 @@ export default function AppRoot() {
                 height: '100vh',
                 background: 'grey',
                 position: 'relative',
+                color: 'white',
             }}
-            onContextMenu={(e) => e.preventDefault()}
-        >
+            onContextMenu={e => e.preventDefault()}>
             <BackgroundProvider />
 
             <Box
@@ -37,10 +37,7 @@ export default function AppRoot() {
                 }}
                 animate={{
                     top: bgStep === 0 || bgStep === 4 ? '50%' : '0%',
-                    transform:
-                        bgStep === 0 || bgStep === 4
-                            ? 'translateY(-50%)'
-                            : 'translateY(0)',
+                    transform: bgStep === 0 || bgStep === 4 ? 'translateY(-50%)' : 'translateY(0)',
                 }}
                 sx={{
                     height: 290,
@@ -49,8 +46,7 @@ export default function AppRoot() {
                     justifyContent: 'center',
                     position: 'absolute',
                     width: '100%',
-                }}
-            >
+                }}>
                 <img
                     src="/stellix-logo-white.svg"
                     alt=""
@@ -66,16 +62,14 @@ export default function AppRoot() {
                     minHeight: '100vh',
                     display: 'flex',
                     flexDirection: 'column',
-                }}
-            >
+                }}>
                 <Box
                     sx={{
                         paddingTop: '290px',
                         paddingBottom: '290px', // spacer to enable centering
                         flex: 1,
                         display: 'flex',
-                    }}
-                >
+                    }}>
                     {currentStep === 0 && <Intro />}
                     {currentStep === 1 && <Question1 />}
                     {currentStep === 2 && <Question2 />}
