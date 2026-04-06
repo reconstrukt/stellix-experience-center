@@ -14,20 +14,14 @@ export default function Question1() {
     const [clicked, setClicked] = useState('');
     const [out, setOut] = useState(false);
 
-    const questionPrompt = useMemo(
-        () => content?.[0]?.prompt ?? '',
-        [content]
-    );
-    const questionOptions = useMemo(
-        () => content?.[0]?.answers?.map((item) => item.title) ?? [],
-        [content]
-    );
+    const questionPrompt = useMemo(() => content?.[0]?.prompt ?? '', [content]);
+    const questionOptions = useMemo(() => content?.[0]?.answers?.map(item => item.title) ?? [], [content]);
 
     if (!content?.[0]) {
         return null;
     }
 
-    const handleClick = (option) => {
+    const handleClick = option => {
         setClicked(option);
     };
 
@@ -54,33 +48,30 @@ export default function Question1() {
                     width: '100%',
                     alignItems: 'center',
                     marginTop: '100px',
-                }}
-            >
+                }}>
                 {questionOptions.map((option, index) => (
                     <Box
                         sx={{
                             mb: '22px',
                         }}
-                        key={index}
-                    >
-                        <MotionWrapper index={index + 1} mounted={!out}>
+                        key={index}>
+                        <MotionWrapper
+                            index={index + 1}
+                            mounted={!out}>
                             <Button
                                 variant="contained"
                                 sx={{
+                                    display: 'block',
                                     height: 57,
                                     borderRadius: 30,
                                     padding: '0 40px',
                                     fontWeight: 300,
                                     fontSize: 25,
                                     textTransform: 'none',
-                                    background:
-                                        clicked === option
-                                            ? palette.yellow
-                                            : palette.offWhite,
+                                    background: clicked === option ? palette.yellow : palette.offWhite,
                                     color: 'black',
                                 }}
-                                onClick={() => handleClick(option)}
-                            >
+                                onClick={() => handleClick(option)}>
                                 {option}
                             </Button>
                         </MotionWrapper>
@@ -88,15 +79,18 @@ export default function Question1() {
                 ))}
             </Stack>
 
-            <MotionWrapper mounted={!out} index={questionOptions.length + 1}>
+            <MotionWrapper
+                mounted={!out}
+                index={questionOptions.length + 1}>
                 <Box
                     sx={{
                         display: 'flex',
                         justifyContent: 'center',
                         marginTop: '100px',
-                    }}
-                >
-                    <NextButton onClick={handleSubmit} disabled={!clicked}>
+                    }}>
+                    <NextButton
+                        onClick={handleSubmit}
+                        disabled={!clicked}>
                         Next
                     </NextButton>
                 </Box>

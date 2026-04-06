@@ -1,5 +1,6 @@
 'use client';
 
+import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import StoreProvider from '@/client/components/functional/StoreProvider';
 import darkTheme from '@/client/config/theme';
@@ -11,6 +12,7 @@ function Providers({ children }) {
         <StoreProvider>
             <ContentLoader />
             <ThemeProvider theme={darkTheme}>
+                <CssBaseline />
                 <ContentfulLivePreviewConditionalProvider>{children}</ContentfulLivePreviewConditionalProvider>
             </ThemeProvider>
         </StoreProvider>

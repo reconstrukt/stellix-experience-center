@@ -20,6 +20,7 @@ export default function AppRoot() {
                 background: 'grey',
                 position: 'relative',
                 color: 'white',
+                fontFamily: '"Museo Sans Rounded"',
             }}
             onContextMenu={e => e.preventDefault()}>
             <BackgroundProvider />

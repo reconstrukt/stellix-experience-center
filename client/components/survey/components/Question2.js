@@ -180,6 +180,7 @@ export default function Question2() {
                             <Button
                                 onClick={() => handleSelect(option)}
                                 sx={{
+                                    display: 'block',
                                     height: 57,
                                     borderRadius: 30,
                                     padding: '0 30px',

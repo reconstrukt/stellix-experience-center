@@ -5,14 +5,14 @@ export default function Title({ children }) {
     return (
         <Box
             sx={{
-                fontWeight: 400,
+                fontFamily: '"Museo Sans Rounded"',
+                fontWeight: 300,
                 fontSize: 55,
                 lineHeight: '120%',
                 letterSpacing: '0%',
                 textAlign: 'center',
                 textWrap: 'balance',
-            }}
-        >
+            }}>
             {children}
         </Box>
     );

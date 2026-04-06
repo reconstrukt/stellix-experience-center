@@ -54,6 +54,20 @@
     font-display: swap;
 }
 
+body {
+    font-family:
+        'Museo Sans Rounded',
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        'Segoe UI',
+        Roboto,
+        Helvetica,
+        Arial,
+        'Apple Color Emoji',
+        'Segoe UI Emoji';
+}
+
 .viewport {
     position: relative;
 }
