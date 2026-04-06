@@ -28,12 +28,12 @@ const darkTheme = createTheme({
         h2: {
             fontSize: '120px',
             fontWeight: 300,
-            lineHeight: 1.167,
+            lineHeight: '120%',
         },
         h3: {
             fontSize: '120px',
-            fontWeight: 250,
-            lineHeight: '100px',
+            fontWeight: 100,
+            lineHeight: '120%',
         },
         h4: {
             color: '#FFF',
