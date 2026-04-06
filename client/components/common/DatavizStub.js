@@ -39,7 +39,12 @@ const LINE_GAP = 16;
 const MIN_RX_FRAC = 0.07;
 const MAX_RX_FRAC = 0.42;
 
-const DISC_FILLS = ['#E0B03C', '#92C83E', '#33B2C1', '#3B4752'];
+const DISC_FILLS = [
+    'rgba(224, 176, 60, 0.85)',
+    'rgba(146, 200, 62, 0.85)',
+    'rgba(51, 178, 193, 0.85)',
+    'rgba(59, 71, 82, 0.85)',
+];
 
 /** Top-3 label pill (Figma node 2:42 — Welcome Screen Templates) */
 const RANK_LABEL_BG = '#E2E2E2';
