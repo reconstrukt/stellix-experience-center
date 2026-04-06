@@ -1,7 +1,7 @@
-import { Box, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { toHttpsUrl } from '@/client/lib/url';
 import DatavizStub from '../common/DatavizStub';
-import MotionWrapper from '../common/MotionWrapper';
+import TemplateScreenStack from '../common/TemplateScreenStack';
 import { useEffect, useState } from 'react';
 import { getDataviz } from '@/client/lib/api';
 
@@ -62,18 +62,9 @@ export default function DatavizTemplate({ data }) {
     const answers = currentQuestion?.answers ?? null;
 
     return (
-        <Stack
-            sx={{
-                minHeight: '100vh',
-                width: '100%',
-                px: 4,
-                py: 6,
-                pb: '800px',
-                position: 'relative',
-                overflowX: 'hidden',
-                WebkitTextSizeAdjust: '100%',
-                textSizeAdjust: '100%',
-            }}>
+        <TemplateScreenStack
+            eventLogoUrl={eventLogoUrl}
+            eventLogoAlt={eventLogoAlt}>
             <Stack
                 spacing={3}
                 sx={{
@@ -92,31 +83,6 @@ export default function DatavizTemplate({ data }) {
                     data={answers}
                 />
             </Stack>
-
-            {eventLogoUrl ? (
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        bottom: '0px',
-                    }}>
-                    <MotionWrapper
-                        mounted={true}
-                        index={4}>
-                        <Box
-                            component="img"
-                            src={eventLogoUrl}
-                            alt={eventLogoAlt}
-                            sx={{
-                                width: '602px',
-                                height: '580px',
-                                objectFit: 'contain',
-                            }}
-                        />
-                    </MotionWrapper>
-                </Box>
-            ) : null}
-        </Stack>
+        </TemplateScreenStack>
     );
 }

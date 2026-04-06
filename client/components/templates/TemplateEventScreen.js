@@ -1,6 +1,7 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { toHttpsUrl } from '@/client/lib/url';
 import MotionWrapper from '../common/MotionWrapper';
+import TemplateScreenStack from '../common/TemplateScreenStack';
 
 export default function EventScreenTemplate({ data }) {
     const title = data?.fields?.title ?? '';
@@ -10,18 +11,9 @@ export default function EventScreenTemplate({ data }) {
     const eventLogoAlt = data?.fields?.eventLogo?.fields?.title ?? 'Event logo';
 
     return (
-        <Stack
-            sx={{
-                minHeight: '100vh',
-                width: '100%',
-                px: 4,
-                py: 6,
-                pb: '800px',
-                position: 'relative',
-                overflowX: 'hidden',
-                WebkitTextSizeAdjust: '100%',
-                textSizeAdjust: '100%',
-            }}>
+        <TemplateScreenStack
+            eventLogoUrl={eventLogoUrl}
+            eventLogoAlt={eventLogoAlt}>
             <Stack
                 spacing={3}
                 sx={{
@@ -96,31 +88,6 @@ export default function EventScreenTemplate({ data }) {
                     ) : null}
                 </MotionWrapper>
             </Stack>
-
-            {eventLogoUrl ? (
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        bottom: '0px',
-                    }}>
-                    <MotionWrapper
-                        mounted={true}
-                        index={4}>
-                        <Box
-                            component="img"
-                            src={eventLogoUrl}
-                            alt={eventLogoAlt}
-                            sx={{
-                                width: '602px',
-                                height: '580px',
-                                objectFit: 'contain',
-                            }}
-                        />
-                    </MotionWrapper>
-                </Box>
-            ) : null}
-        </Stack>
+        </TemplateScreenStack>
     );
 }
