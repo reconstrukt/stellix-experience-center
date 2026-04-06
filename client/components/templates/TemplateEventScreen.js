@@ -4,6 +4,7 @@ import MotionWrapper from '../common/MotionWrapper';
 import TemplateScreenStack from '../common/TemplateScreenStack';
 
 export default function EventScreenTemplate({ data }) {
+    const eyebrowText = data?.fields?.eyebrowText ?? '';
     const title = data?.fields?.title ?? '';
     const subtitle = data?.fields?.subtitle ?? '';
     const description = data?.fields?.description ?? '';
@@ -26,11 +27,13 @@ export default function EventScreenTemplate({ data }) {
                     maxWidth: '1400px',
                     margin: '0 auto',
                 }}>
-                <MotionWrapper
-                    mounted={true}
-                    index={0}>
-                    <Typography variant="h3">Welcome to</Typography>
-                </MotionWrapper>
+                {eyebrowText ? (
+                    <MotionWrapper
+                        mounted={true}
+                        index={0}>
+                        <Typography variant="h3">{eyebrowText}</Typography>
+                    </MotionWrapper>
+                ) : null}
 
                 <MotionWrapper
                     mounted={true}
