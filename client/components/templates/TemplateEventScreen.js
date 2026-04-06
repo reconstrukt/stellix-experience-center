@@ -29,11 +29,7 @@ export default function EventScreenTemplate({ data }) {
                 <MotionWrapper
                     mounted={true}
                     index={0}>
-                    <Typography
-                        variant="h3"
-                        sx={{ color: 'white' }}>
-                        Welcome to
-                    </Typography>
+                    <Typography variant="h3">Welcome to</Typography>
                 </MotionWrapper>
 
                 <MotionWrapper

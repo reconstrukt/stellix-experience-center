@@ -37,7 +37,6 @@ export default function SpeakerScreenTemplate({ data }) {
                             sx={{
                                 textAlign: 'center',
                                 whiteSpace: 'pre-wrap',
-                                overflowWrap: 'anywhere',
                                 pb: 6,
                             }}>
                             {eventType}

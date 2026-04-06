@@ -21,14 +21,7 @@ export default function WelcomeScreenTemplate({ data }) {
                 <MotionWrapper
                     mounted={true}
                     index={0}>
-                    {title ? (
-                        <Typography
-                            variant="h3"
-                            component="h1"
-                            sx={{ color: 'white' }}>
-                            {title}
-                        </Typography>
-                    ) : null}
+                    {title ? <Typography variant="h3">{title}</Typography> : null}
                 </MotionWrapper>
 
                 <MotionWrapper
