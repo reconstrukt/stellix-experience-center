@@ -24,10 +24,10 @@ export default function WelcomeScreenTemplate({ data }) {
                     {title ? <Typography variant="h3">{title}</Typography> : null}
                 </MotionWrapper>
 
-                <MotionWrapper
-                    mounted={true}
-                    index={2}>
-                    {centerImageUrl ? (
+                {centerImageUrl ? (
+                    <MotionWrapper
+                        mounted={true}
+                        index={2}>
                         <Box
                             component="img"
                             src={centerImageUrl}
@@ -39,7 +39,13 @@ export default function WelcomeScreenTemplate({ data }) {
                                 objectFit: 'contain',
                             }}
                         />
-                    ) : centerText ? (
+                    </MotionWrapper>
+                ) : null}
+
+                {centerText ? (
+                    <MotionWrapper
+                        mounted={true}
+                        index={4}>
                         <Typography
                             variant="h4"
                             sx={{
@@ -48,8 +54,8 @@ export default function WelcomeScreenTemplate({ data }) {
                             }}>
                             {centerText}
                         </Typography>
-                    ) : null}
-                </MotionWrapper>
+                    </MotionWrapper>
+                ) : null}
             </Stack>
         </TemplateScreenStack>
     );
