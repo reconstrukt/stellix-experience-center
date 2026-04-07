@@ -33,6 +33,31 @@ const DATAVIZ_ROW_ITEM = {
     },
 };
 
+const DATAVIZ_ROW_STAGGER_SEC = 0.05;
+
+/** Row motion variants with stagger (rows are not direct children of the list `motion` stagger parent). */
+function datavizRowVariants(rowIndex, rowCount) {
+    const enterDelay = rowIndex * DATAVIZ_ROW_STAGGER_SEC;
+    const exitDelay = Math.max(0, rowCount - 1 - rowIndex) * DATAVIZ_ROW_STAGGER_SEC;
+    return {
+        initial: DATAVIZ_ROW_ITEM.initial,
+        animate: {
+            ...DATAVIZ_ROW_ITEM.animate,
+            transition: {
+                ...DATAVIZ_ROW_ITEM.animate.transition,
+                delay: enterDelay,
+            },
+        },
+        exit: {
+            ...DATAVIZ_ROW_ITEM.exit,
+            transition: {
+                ...DATAVIZ_ROW_ITEM.exit.transition,
+                delay: exitDelay,
+            },
+        },
+    };
+}
+
 const ROW_HEIGHT = 104;
 const LINE_GAP = 16;
 
@@ -89,6 +114,8 @@ function rowStackZIndex(rowIndex, rowCount) {
 /** Discs stack 0–100; connector and labels sit above every disc in the list. */
 const CONNECTOR_LINE_Z_INDEX = 110;
 const LABEL_AND_PILL_Z_INDEX = 150;
+/** Motion wrapper for label/pill — above all disc layers (avoids transform stacking glitches). */
+const LABEL_MOTION_Z_INDEX = LABEL_AND_PILL_Z_INDEX;
 
 function normalizeData(data) {
     if (!Array.isArray(data)) return [];
@@ -97,6 +124,7 @@ function normalizeData(data) {
 
 function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) {
     const textRight = rank != null;
+    const rowVariants = useMemo(() => datavizRowVariants(rowIndex, rowCount), [rowIndex, rowCount]);
     const rowRef = useRef(null);
     const textRef = useRef(null);
     const filterId = `dvz-glow-${useId().replace(/:/g, '')}`;
@@ -133,13 +161,17 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
                 x1 = rightOfText + LINE_GAP;
                 x2 = cx;
             }
-            const centerY = textRect.top + textRect.height / 2 - rowRect.top - bt;
+            // Use the row padding box vertical center (same space as `position:absolute; top:0` + SVG).
+            // Measuring the text node's bbox centers the line box, not the row band — with MUI
+            // Typography line-height and flex-centered labels, that reads as "label above the line".
+            const rowInnerH = rowEl.clientHeight;
+            const centerY = rowInnerH > 0 ? rowInnerH / 2 : textRect.top + textRect.height / 2 - rowRect.top - bt;
 
             setRowW(safeW);
-            setRowH(Math.max(ROW_HEIGHT, rowEl.offsetHeight));
+            setRowH(Math.max(ROW_HEIGHT, rowInnerH));
             setLineX1(Number.isFinite(x1) ? x1 : 0);
             setLineX2(Number.isFinite(x2) ? x2 : 0);
-            setTextCenterY(Number.isFinite(centerY) ? centerY : rowEl.clientHeight / 2);
+            setTextCenterY(Number.isFinite(centerY) ? centerY : rowInnerH / 2);
         };
         measure();
         const ro = new ResizeObserver(measure);
@@ -172,174 +204,204 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
                 width: '100%',
                 minHeight: ROW_HEIGHT,
                 display: 'flex',
-                alignItems: 'center',
+                flexDirection: 'row',
+                alignItems: 'stretch',
                 py: 0.5,
                 boxSizing: 'border-box',
                 overflow: 'visible',
             }}>
-            {rank != null ? (
-                <Box
-                    sx={{
-                        position: 'relative',
-                        zIndex: LABEL_AND_PILL_Z_INDEX,
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        alignItems: 'center',
-                        width: '100%',
-                    }}>
+            <Box
+                component={motion.div}
+                variants={rowVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                sx={{
+                    position: 'relative',
+                    zIndex: LABEL_MOTION_Z_INDEX,
+                    width: '100%',
+                    alignSelf: 'stretch',
+                    display: 'flex',
+                    alignItems: 'center',
+                    minHeight: ROW_HEIGHT,
+                    boxSizing: 'border-box',
+                }}>
+                {rank != null ? (
                     <Box
-                        ref={textRef}
                         sx={{
-                            display: 'inline-flex',
+                            display: 'flex',
+                            justifyContent: 'flex-end',
                             alignItems: 'center',
-                            gap: { xs: '14px', sm: '16.65px' },
-                            width: 'fit-content',
-                            maxWidth: '100%',
-                            boxSizing: 'border-box',
-                            px: '21.5px',
-                            py: '21.5px',
-                            borderRadius: '46px',
-                            backgroundColor: RANK_LABEL_BG,
+                            width: '100%',
                         }}>
                         <Box
+                            ref={textRef}
                             sx={{
-                                width: { xs: 44, sm: 52 },
-                                height: { xs: 44, sm: 52 },
-                                borderRadius: '50%',
-                                bgcolor: DISC_FILLS[rank - 1],
-                                display: 'flex',
+                                display: 'inline-flex',
                                 alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0,
+                                gap: { xs: '14px', sm: '16.65px' },
+                                width: 'fit-content',
+                                maxWidth: '100%',
+                                boxSizing: 'border-box',
+                                px: '21.5px',
+                                py: '21.5px',
+                                borderRadius: '46px',
+                                backgroundColor: RANK_LABEL_BG,
                             }}>
+                            <Box
+                                sx={{
+                                    width: { xs: 44, sm: 52 },
+                                    height: { xs: 44, sm: 52 },
+                                    borderRadius: '50%',
+                                    bgcolor: DISC_FILLS[rank - 1],
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0,
+                                }}>
+                                <Typography
+                                    component="span"
+                                    sx={{
+                                        color: RANK_LABEL_TEXT,
+                                        fontWeight: 500,
+                                        fontSize: { xs: '26px', sm: '30px' },
+                                        lineHeight: 1,
+                                    }}>
+                                    {rank}
+                                </Typography>
+                            </Box>
                             <Typography
-                                component="span"
+                                variant="body1"
                                 sx={{
                                     color: RANK_LABEL_TEXT,
                                     fontWeight: 500,
-                                    fontSize: { xs: '26px', sm: '30px' },
-                                    lineHeight: 1,
+                                    textAlign: 'left',
+                                    flex: '0 1 auto',
+                                    minWidth: 0,
+                                    fontSize: { xs: '27px', sm: '35px' },
+                                    lineHeight: 1.25,
+                                    overflowWrap: 'break-word',
                                 }}>
-                                {rank}
+                                {row.text}
                             </Typography>
                         </Box>
-                        <Typography
-                            variant="body1"
-                            sx={{
-                                color: RANK_LABEL_TEXT,
-                                fontWeight: 500,
-                                textAlign: 'left',
-                                flex: '0 1 auto',
-                                minWidth: 0,
-                                fontSize: { xs: '27px', sm: '35px' },
-                                lineHeight: 1.25,
-                                overflowWrap: 'break-word',
-                            }}>
-                            {row.text}
-                        </Typography>
                     </Box>
-                </Box>
-            ) : (
-                <Typography
-                    ref={textRef}
-                    variant="body1"
-                    sx={{
-                        position: 'relative',
-                        zIndex: LABEL_AND_PILL_Z_INDEX,
-                        display: 'inline-block',
-                        verticalAlign: 'top',
-                        maxWidth: '100%',
-                        width: 'fit-content',
-                        pr: 1,
-                        textAlign: 'left',
-                        fontSize: { xs: '27px', sm: '33px' },
-                        lineHeight: 1.25,
-                        overflowWrap: 'break-word',
-                    }}>
-                    {row.text}
-                </Typography>
-            )}
+                ) : (
+                    <Typography
+                        ref={textRef}
+                        variant="body1"
+                        sx={{
+                            display: 'inline-block',
+                            verticalAlign: 'top',
+                            maxWidth: '100%',
+                            width: 'fit-content',
+                            pr: 1,
+                            textAlign: 'left',
+                            fontSize: { xs: '27px', sm: '33px' },
+                            lineHeight: 1.25,
+                            overflowWrap: 'break-word',
+                        }}>
+                        {row.text}
+                    </Typography>
+                )}
+            </Box>
 
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden
-                width="100%"
-                height={safeH}
-                style={{
+            <Box
+                component={motion.div}
+                variants={rowVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                sx={{
                     position: 'absolute',
                     left: 0,
                     top: 0,
-                    display: 'block',
-                    pointerEvents: 'none',
-                    overflow: 'visible',
-                    zIndex: CONNECTOR_LINE_Z_INDEX,
-                }}
-                viewBox={`0 0 ${safeW} ${safeH}`}
-                preserveAspectRatio="none">
-                {showLine ? (
-                    <line
-                        x1={lineX1}
-                        y1={textY}
-                        x2={lineX2}
-                        y2={textY}
-                        stroke="rgba(255,255,255,0.45)"
-                        strokeWidth={4}
-                        strokeDasharray="4 24"
-                        strokeLinecap="round"
-                    />
-                ) : null}
-            </svg>
-
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden
-                width="100%"
-                height={safeH}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    display: 'block',
-                    pointerEvents: 'none',
-                    overflow: 'visible',
+                    width: '100%',
+                    height: '100%',
                     zIndex: discZIndex,
-                }}
-                viewBox={`0 0 ${safeW} ${safeH}`}
-                preserveAspectRatio="none">
-                <defs>
-                    <filter
-                        id={filterId}
-                        x="-40%"
-                        y="-40%"
-                        width="180%"
-                        height="180%">
-                        <feGaussianBlur
-                            stdDeviation="2.4"
-                            result="b"
+                    pointerEvents: 'none',
+                }}>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden
+                    width="100%"
+                    height={safeH}
+                    style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        display: 'block',
+                        pointerEvents: 'none',
+                        overflow: 'visible',
+                        zIndex: CONNECTOR_LINE_Z_INDEX,
+                    }}
+                    viewBox={`0 0 ${safeW} ${safeH}`}
+                    preserveAspectRatio="none">
+                    {showLine ? (
+                        <line
+                            x1={lineX1}
+                            y1={textY}
+                            x2={lineX2}
+                            y2={textY}
+                            stroke="rgba(255,255,255,0.45)"
+                            strokeWidth={4}
+                            strokeDasharray="4 24"
+                            strokeLinecap="round"
                         />
-                        <feMerge>
-                            <feMergeNode in="b" />
-                            <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                    </filter>
-                </defs>
-                <ellipse
-                    cx={cx}
-                    cy={textY}
-                    rx={rx}
-                    ry={ry}
-                    fill={fill}
-                    stroke="rgba(255,255,255,0.35)"
-                    strokeWidth={2}
-                    filter={`url(#${filterId})`}
-                />
-                <circle
-                    cx={cx}
-                    cy={textY}
-                    r={dotR}
-                    fill="rgba(255,255,255,0.95)"
-                />
-            </svg>
+                    ) : null}
+                </svg>
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden
+                    width="100%"
+                    height={safeH}
+                    style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        display: 'block',
+                        pointerEvents: 'none',
+                        overflow: 'visible',
+                        zIndex: discZIndex,
+                    }}
+                    viewBox={`0 0 ${safeW} ${safeH}`}
+                    preserveAspectRatio="none">
+                    <defs>
+                        <filter
+                            id={filterId}
+                            x="-40%"
+                            y="-40%"
+                            width="180%"
+                            height="180%">
+                            <feGaussianBlur
+                                stdDeviation="2.4"
+                                result="b"
+                            />
+                            <feMerge>
+                                <feMergeNode in="b" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <ellipse
+                        cx={cx}
+                        cy={textY}
+                        rx={rx}
+                        ry={ry}
+                        fill={fill}
+                        stroke="rgba(255,255,255,0.35)"
+                        strokeWidth={2}
+                        filter={`url(#${filterId})`}
+                    />
+                    <circle
+                        cx={cx}
+                        cy={textY}
+                        r={dotR}
+                        fill="rgba(255,255,255,0.95)"
+                    />
+                </svg>
+            </Box>
         </Box>
     );
 }
@@ -449,7 +511,6 @@ export default function DatavizStub({ data, questionIndex = 0, title }) {
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'stretch',
-                            overflow: 'auto',
                         }}>
                         {rows.length > 0 ? (
                             <Box
@@ -463,8 +524,6 @@ export default function DatavizStub({ data, questionIndex = 0, title }) {
                                 {rows.map((row, i) => (
                                     <Box
                                         key={`${i}-${row.text}`}
-                                        component={motion.div}
-                                        variants={DATAVIZ_ROW_ITEM}
                                         sx={{
                                             position: 'relative',
                                             width: '100%',
