@@ -153,7 +153,8 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
     const cx = safeW / 2;
     const v = Number(row.value);
     const rx = safeW * (MIN_RX_FRAC + (v / maxValue) * (MAX_RX_FRAC - MIN_RX_FRAC));
-    const ry = discRy(rowIndex, rowCount, ROW_HEIGHT);
+    // Scale perspective with actual row height so middle-row discs stay centered in the row band.
+    const ry = discRy(rowIndex, rowCount, safeH);
     const textY = Math.min(Math.max(0, textCenterY), safeH);
     const fill = DISC_FILLS[valueQuartileColorIndex(v, dataMin, dataMax)];
     const dotR = 6;
@@ -163,9 +164,6 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
     const lineRight = Math.max(lineX1, lineX2);
     const showLine = lineRight - lineLeft > 0.5;
 
-    const discW = 2 * rx;
-    const discH = 2 * ry;
-
     return (
         <Box
             ref={rowRef}
@@ -173,7 +171,10 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
                 position: 'relative',
                 width: '100%',
                 minHeight: ROW_HEIGHT,
+                display: 'flex',
+                alignItems: 'center',
                 py: 0.5,
+                boxSizing: 'border-box',
                 overflow: 'visible',
             }}>
             {rank != null ? (
@@ -183,6 +184,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
                         zIndex: LABEL_AND_PILL_Z_INDEX,
                         display: 'flex',
                         justifyContent: 'flex-end',
+                        alignItems: 'center',
                         width: '100%',
                     }}>
                     <Box
@@ -288,60 +290,56 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
                 ) : null}
             </svg>
 
-            <Box
-                sx={{
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden
+                width="100%"
+                height={safeH}
+                style={{
                     position: 'absolute',
-                    left: '50%',
-                    top: `${textY}px`,
-                    transform: 'translate(-50%, -50%)',
-                    width: `${discW}px`,
-                    height: `${discH}px`,
+                    left: 0,
+                    top: 0,
+                    display: 'block',
                     pointerEvents: 'none',
+                    overflow: 'visible',
                     zIndex: discZIndex,
-                }}>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden
-                    width="100%"
-                    height="100%"
-                    overflow="visible"
-                    viewBox={`0 0 ${discW} ${discH}`}
-                    preserveAspectRatio="none">
-                    <defs>
-                        <filter
-                            id={filterId}
-                            x="-40%"
-                            y="-40%"
-                            width="180%"
-                            height="180%">
-                            <feGaussianBlur
-                                stdDeviation="2.4"
-                                result="b"
-                            />
-                            <feMerge>
-                                <feMergeNode in="b" />
-                                <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                        </filter>
-                    </defs>
-                    <ellipse
-                        cx={rx}
-                        cy={ry}
-                        rx={rx}
-                        ry={ry}
-                        fill={fill}
-                        stroke="rgba(255,255,255,0.35)"
-                        strokeWidth={2}
-                        filter={`url(#${filterId})`}
-                    />
-                    <circle
-                        cx={rx}
-                        cy={ry}
-                        r={dotR}
-                        fill="rgba(255,255,255,0.95)"
-                    />
-                </svg>
-            </Box>
+                }}
+                viewBox={`0 0 ${safeW} ${safeH}`}
+                preserveAspectRatio="none">
+                <defs>
+                    <filter
+                        id={filterId}
+                        x="-40%"
+                        y="-40%"
+                        width="180%"
+                        height="180%">
+                        <feGaussianBlur
+                            stdDeviation="2.4"
+                            result="b"
+                        />
+                        <feMerge>
+                            <feMergeNode in="b" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+                <ellipse
+                    cx={cx}
+                    cy={textY}
+                    rx={rx}
+                    ry={ry}
+                    fill={fill}
+                    stroke="rgba(255,255,255,0.35)"
+                    strokeWidth={2}
+                    filter={`url(#${filterId})`}
+                />
+                <circle
+                    cx={cx}
+                    cy={textY}
+                    r={dotR}
+                    fill="rgba(255,255,255,0.95)"
+                />
+            </svg>
         </Box>
     );
 }
