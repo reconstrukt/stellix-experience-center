@@ -40,10 +40,10 @@ const MIN_RX_FRAC = 0.07;
 const MAX_RX_FRAC = 0.42;
 
 const DISC_FILLS = [
-    'rgba(224, 176, 60, 0.85)',
-    'rgba(146, 200, 62, 0.85)',
-    'rgba(51, 178, 193, 0.85)',
-    'rgba(59, 71, 82, 0.85)',
+    'rgba(224, 176, 60, 0.75)',
+    'rgba(146, 200, 62, 0.75)',
+    'rgba(51, 178, 193, 0.75)',
+    'rgba(59, 71, 82, 0.75)',
 ];
 
 /** Top-3 label pill (Figma node 2:42 — Welcome Screen Templates) */
@@ -76,7 +76,7 @@ function discRy(rowIndex, rowCount, rowHeight) {
     return ryMin + dist * (ryMax - ryMin);
 }
 
-/** Middle rows on top, edge rows behind — matches perspective (front vs back). */
+/** Middle rows on top, edge rows behind — matches perspective (front vs back). Applied only to discs (max ≈ 100). */
 function rowStackZIndex(rowIndex, rowCount) {
     if (rowCount <= 1) {
         return 1;
@@ -85,6 +85,10 @@ function rowStackZIndex(rowIndex, rowCount) {
     const dist = Math.abs(rowIndex - mid) / mid;
     return Math.round((1 - dist) * 100);
 }
+
+/** Discs stack 0–100; connector and labels sit above every disc in the list. */
+const CONNECTOR_LINE_Z_INDEX = 110;
+const LABEL_AND_PILL_Z_INDEX = 150;
 
 function normalizeData(data) {
     if (!Array.isArray(data)) return [];
@@ -153,6 +157,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
     const textY = Math.min(Math.max(0, textCenterY), safeH);
     const fill = DISC_FILLS[valueQuartileColorIndex(v, dataMin, dataMax)];
     const dotR = 6;
+    const discZIndex = rowStackZIndex(rowIndex, rowCount);
 
     const lineLeft = Math.min(lineX1, lineX2);
     const lineRight = Math.max(lineX1, lineX2);
@@ -175,7 +180,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
                 <Box
                     sx={{
                         position: 'relative',
-                        zIndex: 3,
+                        zIndex: LABEL_AND_PILL_Z_INDEX,
                         display: 'flex',
                         justifyContent: 'flex-end',
                         width: '100%',
@@ -238,7 +243,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
                     variant="body1"
                     sx={{
                         position: 'relative',
-                        zIndex: 3,
+                        zIndex: LABEL_AND_PILL_Z_INDEX,
                         display: 'inline-block',
                         verticalAlign: 'top',
                         maxWidth: '100%',
@@ -265,7 +270,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
                     display: 'block',
                     pointerEvents: 'none',
                     overflow: 'visible',
-                    zIndex: 2,
+                    zIndex: CONNECTOR_LINE_Z_INDEX,
                 }}
                 viewBox={`0 0 ${safeW} ${safeH}`}
                 preserveAspectRatio="none">
@@ -292,7 +297,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
                     width: `${discW}px`,
                     height: `${discH}px`,
                     pointerEvents: 'none',
-                    zIndex: 0,
+                    zIndex: discZIndex,
                 }}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -464,7 +469,6 @@ export default function DatavizStub({ data, questionIndex = 0, title }) {
                                         variants={DATAVIZ_ROW_ITEM}
                                         sx={{
                                             position: 'relative',
-                                            zIndex: rowStackZIndex(i, rows.length),
                                             width: '100%',
                                         }}>
                                         <DiscRow
