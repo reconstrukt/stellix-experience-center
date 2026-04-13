@@ -2,8 +2,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 import BackgroundProvider from './BackgroundProvider';
 import useAppState from '@/client/components/survey/contexts/AppStateContext';
-import QuestionSingleAnswer from './QuestionSingleAnswer';
-import QuestionMultiAnswer from './QuestionMultiAnswer';
+import SurveyQuestion from './SurveyQuestion';
 import ThankYou from './ThankYou';
 import Intro from './Intro';
 import Outro from './Outro';
@@ -72,18 +71,8 @@ export default function AppRoot() {
                         display: 'flex',
                     }}>
                     {currentStep === 0 && <Intro />}
-                    {currentStep === 1 && content?.[0] && (
-                        <QuestionSingleAnswer
-                            questionPrompt={content[0].prompt ?? ''}
-                            questionOptions={content[0].answers?.map(item => item.title) ?? []}
-                        />
-                    )}
-                    {currentStep === 2 && content?.[1] && (
-                        <QuestionMultiAnswer
-                            questionPrompt={content[1].prompt ?? ''}
-                            questionOptions={content[1].answers?.map(item => item.title) ?? []}
-                        />
-                    )}
+                    {currentStep === 1 && <SurveyQuestion question={content?.[0]} />}
+                    {currentStep === 2 && <SurveyQuestion question={content?.[1]} />}
                     {currentStep === 3 && <ThankYou />}
                     {currentStep === 4 && <Outro />}
                 </Box>
