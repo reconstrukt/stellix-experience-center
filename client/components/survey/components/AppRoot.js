@@ -2,15 +2,15 @@ import React from 'react';
 import { Box } from '@mui/material';
 import BackgroundProvider from './BackgroundProvider';
 import useAppState from '@/client/components/survey/contexts/AppStateContext';
-import Question1 from './Question1';
-import Question2 from './Question2';
+import QuestionSingleAnswer from './QuestionSingleAnswer';
+import QuestionMultiAnswer from './QuestionMultiAnswer';
 import ThankYou from './ThankYou';
 import Intro from './Intro';
 import Outro from './Outro';
 import { motion } from 'framer-motion';
 
 export default function AppRoot() {
-    const { bgStep, currentStep } = useAppState();
+    const { bgStep, currentStep, content } = useAppState();
 
     return (
         <Box
@@ -72,8 +72,18 @@ export default function AppRoot() {
                         display: 'flex',
                     }}>
                     {currentStep === 0 && <Intro />}
-                    {currentStep === 1 && <Question1 />}
-                    {currentStep === 2 && <Question2 />}
+                    {currentStep === 1 && content?.[0] && (
+                        <QuestionSingleAnswer
+                            questionPrompt={content[0].prompt ?? ''}
+                            questionOptions={content[0].answers?.map(item => item.title) ?? []}
+                        />
+                    )}
+                    {currentStep === 2 && content?.[1] && (
+                        <QuestionMultiAnswer
+                            questionPrompt={content[1].prompt ?? ''}
+                            questionOptions={content[1].answers?.map(item => item.title) ?? []}
+                        />
+                    )}
                     {currentStep === 3 && <ThankYou />}
                     {currentStep === 4 && <Outro />}
                 </Box>

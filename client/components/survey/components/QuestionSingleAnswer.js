@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import Wrapper from './shared/Wrapper';
 import Title from './shared/Title';
 import { Button, Box, Stack } from '@mui/material';
@@ -8,18 +8,11 @@ import useForm from '@/client/components/survey/contexts/FormContext';
 import MotionWrapper from './shared/MotionWrapper';
 import NextButton from './shared/NextButton';
 
-export default function Question1() {
-    const { goToNextStep, goToNextBgStep, content } = useAppState();
+export default function QuestionSingleAnswer({ questionPrompt, questionOptions = [] }) {
+    const { goToNextStep, goToNextBgStep } = useAppState();
     const { setAnswerOne } = useForm();
     const [clicked, setClicked] = useState('');
     const [out, setOut] = useState(false);
-
-    const questionPrompt = useMemo(() => content?.[0]?.prompt ?? '', [content]);
-    const questionOptions = useMemo(() => content?.[0]?.answers?.map(item => item.title) ?? [], [content]);
-
-    if (!content?.[0]) {
-        return null;
-    }
 
     const handleClick = option => {
         setClicked(option);

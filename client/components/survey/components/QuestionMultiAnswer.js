@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import Wrapper from './shared/Wrapper';
 import Title from './shared/Title';
 import { Button, Box, Stack } from '@mui/material';
@@ -8,19 +8,12 @@ import useForm from '@/client/components/survey/contexts/FormContext';
 import MotionWrapper from './shared/MotionWrapper';
 import NextButton from './shared/NextButton';
 
-export default function Question2() {
-    const { goToNextStep, goToNextBgStep, content } = useAppState();
+export default function QuestionMultiAnswer({ questionPrompt, questionOptions = [] }) {
+    const { goToNextStep, goToNextBgStep } = useAppState();
     const { setAnswerTwo } = useForm();
 
     const [selected, setSelected] = useState([]);
     const [out, setOut] = useState(false);
-
-    const questionPrompt = useMemo(() => content?.[1]?.prompt ?? '', [content]);
-    const questionOptions = useMemo(() => content?.[1]?.answers?.map(item => item.title) ?? [], [content]);
-
-    if (!content?.[1]) {
-        return null;
-    }
 
     const handleSelect = option => {
         if (selected.includes(option)) return;
