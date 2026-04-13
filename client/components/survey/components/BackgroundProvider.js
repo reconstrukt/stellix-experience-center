@@ -52,12 +52,43 @@ const GRADIENT = [
     },
 ];
 
+/** Maps flow phase to GRADIENT[0..4]: intro, mid questions, last question, thank you, outro. */
+function gradientIndexForBgStep(bgStep, questionCount) {
+    if (!questionCount || questionCount < 1) {
+        return Math.min(bgStep, 4);
+    }
+
+    const thankYouStep = questionCount + 1;
+    const outroStep = questionCount + 2;
+
+    if (bgStep === 0) {
+        return 0;
+    }
+    if (bgStep === outroStep) {
+        return 4;
+    }
+    if (bgStep === thankYouStep) {
+        return 3;
+    }
+    if (bgStep === questionCount) {
+        return 2;
+    }
+    if (bgStep >= 1 && bgStep < questionCount) {
+        return 1;
+    }
+
+    return Math.min(bgStep, 4);
+}
+
 export default function BackgroundProvider() {
-    const { bgStep } = useAppState();
+    const { bgStep, totalSteps, content } = useAppState();
 
-    const currentGradient = GRADIENT[bgStep];
+    const lastStep = totalSteps - 1;
+    const questionCount = Array.isArray(content) ? content.length : 0;
+    const gradientIndex = gradientIndexForBgStep(bgStep, questionCount);
+    const currentGradient = GRADIENT[gradientIndex];
 
-    const transitionDuration = bgStep === 4 ? '4s' : '2s';
+    const transitionDuration = bgStep === lastStep ? '4s' : '2s';
 
     const sunriseTransitionProps = [
         '--survey-sunrise-width',
@@ -86,7 +117,8 @@ export default function BackgroundProvider() {
                     bottom: 0,
                     right: 0,
                     transition: `background-color ${transitionDuration} ease`,
-                    backgroundColor: bgStep === 0 || bgStep === 1 || bgStep === 4 ? palette.black : palette.offWhite,
+                    backgroundColor:
+                        bgStep === 0 || bgStep === 1 || bgStep === lastStep ? palette.black : palette.offWhite,
                 }}
             />
 

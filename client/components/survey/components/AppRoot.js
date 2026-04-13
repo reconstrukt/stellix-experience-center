@@ -9,7 +9,12 @@ import Outro from './Outro';
 import { motion } from 'framer-motion';
 
 export default function AppRoot() {
-    const { bgStep, currentStep, content } = useAppState();
+    const { bgStep, currentStep, content, totalSteps } = useAppState();
+
+    const questionCount = content?.length ?? 0;
+    const thankYouStep = questionCount + 1;
+    const outroStep = questionCount + 2;
+    const lastStep = totalSteps - 1;
 
     return (
         <Box
@@ -27,8 +32,8 @@ export default function AppRoot() {
             <Box
                 component={motion.div}
                 transition={{
-                    duration: bgStep === 4 ? 3 : 0.9,
-                    delay: bgStep === 4 ? 1 : 0,
+                    duration: bgStep === lastStep ? 3 : 0.9,
+                    delay: bgStep === lastStep ? 1 : 0,
                     ease: 'easeInOut',
                 }}
                 initial={{
@@ -36,8 +41,8 @@ export default function AppRoot() {
                     transform: 'translateY(-50%)',
                 }}
                 animate={{
-                    top: bgStep === 0 || bgStep === 4 ? '50%' : '0%',
-                    transform: bgStep === 0 || bgStep === 4 ? 'translateY(-50%)' : 'translateY(0)',
+                    top: bgStep === 0 || bgStep === lastStep ? '50%' : '0%',
+                    transform: bgStep === 0 || bgStep === lastStep ? 'translateY(-50%)' : 'translateY(0)',
                 }}
                 sx={{
                     height: 290,
@@ -71,10 +76,17 @@ export default function AppRoot() {
                         display: 'flex',
                     }}>
                     {currentStep === 0 && <Intro />}
-                    {currentStep === 1 && <SurveyQuestion question={content?.[0]} />}
-                    {currentStep === 2 && <SurveyQuestion question={content?.[1]} />}
-                    {currentStep === 3 && <ThankYou />}
-                    {currentStep === 4 && <Outro />}
+                    {questionCount > 0 &&
+                        currentStep >= 1 &&
+                        currentStep <= questionCount &&
+                        content[currentStep - 1] && (
+                            <SurveyQuestion
+                                question={content[currentStep - 1]}
+                                questionIndex={currentStep - 1}
+                            />
+                        )}
+                    {questionCount > 0 && currentStep === thankYouStep && <ThankYou />}
+                    {questionCount > 0 && currentStep === outroStep && <Outro />}
                 </Box>
             </Box>
         </Box>

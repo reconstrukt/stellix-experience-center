@@ -8,9 +8,14 @@ import useForm from '@/client/components/survey/contexts/FormContext';
 import MotionWrapper from './shared/MotionWrapper';
 import NextButton from './shared/NextButton';
 
-export default function QuestionMultiAnswer({ questionPrompt, questionOptions = [] }) {
+export default function QuestionMultiAnswer({
+    questionIndex,
+    isLastQuestion,
+    questionPrompt,
+    questionOptions = [],
+}) {
     const { goToNextStep, goToNextBgStep } = useAppState();
-    const { setAnswerTwo } = useForm();
+    const { setAnswerAt } = useForm();
 
     const [selected, setSelected] = useState([]);
     const [out, setOut] = useState(false);
@@ -33,7 +38,7 @@ export default function QuestionMultiAnswer({ questionPrompt, questionOptions = 
     const handleSubmit = () => {
         if (selected.length === 0) return;
 
-        setAnswerTwo(selected);
+        setAnswerAt(questionIndex, selected);
         setOut(true);
         goToNextBgStep();
 
@@ -150,7 +155,7 @@ export default function QuestionMultiAnswer({ questionPrompt, questionOptions = 
                     <NextButton
                         onClick={handleSubmit}
                         disabled={selected.length === 0}>
-                        Submit
+                        {isLastQuestion ? 'Submit' : 'Next'}
                     </NextButton>
                 </Stack>
             </MotionWrapper>

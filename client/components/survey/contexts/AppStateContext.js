@@ -1,7 +1,13 @@
 import { getQuestions } from '@/client/lib/api';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 const AppStateContext = createContext();
+
+/** Intro (0) + questions (1..N) + ThankYou + Outro → N + 3 steps. Fallback while content is loading. */
+function totalStepsForContent(content) {
+    const n = Array.isArray(content) ? content.length : 0;
+    return n > 0 ? n + 3 : 5;
+}
 
 export const AppStateProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
@@ -9,16 +15,18 @@ export const AppStateProvider = ({ children }) => {
     const [cmsid, setCmsid] = useState(null);
     const [loadError, setLoadError] = useState(false);
 
-    const [currentStep, setCurrentStep] = useState(0); // 0 | 1 | 2 | 3 | 4
+    const [currentStep, setCurrentStep] = useState(0);
     const [bgStep, setBgStep] = useState(0);
 
-    const goToNextStep = () => {
-        setCurrentStep((val) => (val + 1) % 5);
-    };
+    const totalSteps = useMemo(() => totalStepsForContent(content), [content]);
 
-    const goToNextBgStep = () => {
-        setBgStep((val) => (val + 1) % 5);
-    };
+    const goToNextStep = useCallback(() => {
+        setCurrentStep(val => (val + 1) % totalSteps);
+    }, [totalSteps]);
+
+    const goToNextBgStep = useCallback(() => {
+        setBgStep(val => (val + 1) % totalSteps);
+    }, [totalSteps]);
 
     useEffect(() => {
         // make sure when current step changes the bg step is set to the same step
@@ -26,10 +34,6 @@ export const AppStateProvider = ({ children }) => {
 
         setBgStep(currentStep);
     }, [currentStep]);
-
-    useEffect(() => {
-        console.log(currentStep, bgStep);
-    }, [currentStep, bgStep]);
 
     useEffect(() => {
         async function getContent() {
@@ -43,7 +47,7 @@ export const AppStateProvider = ({ children }) => {
                     typeof id === 'string' &&
                     id.length > 0 &&
                     Array.isArray(questions) &&
-                    questions.length >= 2
+                    questions.length >= 1
                 ) {
                     setContent(questions);
                     setCmsid(id);
@@ -72,6 +76,7 @@ export const AppStateProvider = ({ children }) => {
                 goToNextStep,
                 bgStep,
                 goToNextBgStep,
+                totalSteps,
 
                 loading,
                 content,

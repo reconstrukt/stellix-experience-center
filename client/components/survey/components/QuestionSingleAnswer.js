@@ -8,9 +8,14 @@ import useForm from '@/client/components/survey/contexts/FormContext';
 import MotionWrapper from './shared/MotionWrapper';
 import NextButton from './shared/NextButton';
 
-export default function QuestionSingleAnswer({ questionPrompt, questionOptions = [] }) {
+export default function QuestionSingleAnswer({
+    questionIndex,
+    isLastQuestion,
+    questionPrompt,
+    questionOptions = [],
+}) {
     const { goToNextStep, goToNextBgStep } = useAppState();
-    const { setAnswerOne } = useForm();
+    const { setAnswerAt } = useForm();
     const [clicked, setClicked] = useState('');
     const [out, setOut] = useState(false);
 
@@ -21,7 +26,7 @@ export default function QuestionSingleAnswer({ questionPrompt, questionOptions =
     const handleSubmit = () => {
         if (!clicked) return;
 
-        setAnswerOne([clicked]);
+        setAnswerAt(questionIndex, [clicked]);
         setOut(true);
         goToNextBgStep();
 
@@ -84,7 +89,7 @@ export default function QuestionSingleAnswer({ questionPrompt, questionOptions =
                     <NextButton
                         onClick={handleSubmit}
                         disabled={!clicked}>
-                        Next
+                        {isLastQuestion ? 'Submit' : 'Next'}
                     </NextButton>
                 </Box>
             </MotionWrapper>

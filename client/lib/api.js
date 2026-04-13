@@ -17,13 +17,11 @@ const fetchApi = async (endpoint, options = {}) => {
     return response.json();
 };
 
-export const postAnswers = ({ q1, a1, q2, a2, cmsid }) => {
+/** @param {Array<{ question: string, answers: unknown[], cmsid: string }>} items */
+export const postAnswers = items => {
     return fetchApi('/survey', {
         method: 'POST',
-        body: JSON.stringify([
-            { question: q1, answers: a1, cmsid },
-            { question: q2, answers: a2, cmsid },
-        ]),
+        body: JSON.stringify(items),
     });
 };
 

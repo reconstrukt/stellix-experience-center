@@ -1,46 +1,67 @@
 import { postAnswers } from '@/client/lib/api';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import useAppState from './AppStateContext';
 
 const FormContext = createContext();
 
 export const FormProvider = ({ children }) => {
     const { content, cmsid } = useAppState();
-    const [answerOne, setAnswerOne] = useState([]);
-    const [answerTwo, setAnswerTwo] = useState([]);
+    const [answers, setAnswers] = useState([]);
+
+    useEffect(() => {
+        const n = content?.length ?? 0;
+        if (n > 0) {
+            setAnswers(Array.from({ length: n }, () => []));
+        } else {
+            setAnswers([]);
+        }
+    }, [content]);
+
+    const setAnswerAt = useCallback((index, value) => {
+        setAnswers(prev => {
+            const next = [...prev];
+            next[index] = value;
+            return next;
+        });
+    }, []);
 
     const postData = async () => {
-        if (!content?.[0] || !content?.[1] || !cmsid) {
+        if (!content?.length || !cmsid) {
             return;
         }
 
-        console.log('Submitting...');
-        console.log(answerOne, answerTwo);
+        console.log('Submitting...', answers);
 
-        const data = await postAnswers({
-            q1: content[0].prompt,
-            a1: answerOne,
-            q2: content[1].prompt,
-            a2: answerTwo,
+        const items = content.map((q, i) => ({
+            question: q.prompt,
+            answers: answers[i],
             cmsid,
-        });
+        }));
+
+        const data = await postAnswers(items);
         console.log('API RESPONSE', data);
 
-        setAnswerOne([]);
-        setAnswerTwo([]);
+        setAnswers(Array.from({ length: content.length }, () => []));
     };
 
     useEffect(() => {
-        if (answerOne.length > 0 && answerTwo.length > 0 && content?.[0] && content?.[1]) {
-            postData();
+        if (!content?.length || !cmsid) {
+            return;
         }
-    }, [answerOne, answerTwo, content, cmsid]);
+        if (answers.length !== content.length) {
+            return;
+        }
+        const allAnswered = answers.every(a => Array.isArray(a) && a.length > 0);
+        if (!allAnswered) {
+            return;
+        }
+        postData();
+    }, [answers, content, cmsid]);
 
     return (
         <FormContext.Provider
             value={{
-                setAnswerOne,
-                setAnswerTwo,
+                setAnswerAt,
                 postData,
             }}>
             {children}
