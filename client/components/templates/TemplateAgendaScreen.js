@@ -92,6 +92,7 @@ export default function AgendaScreenTemplate({ data }) {
                                                         fontWeight: 300,
                                                         flex: '1 1 auto',
                                                         minWidth: 0,
+                                                        textWrap: 'balance',
                                                     }}>
                                                     {item.event}
                                                 </Typography>
