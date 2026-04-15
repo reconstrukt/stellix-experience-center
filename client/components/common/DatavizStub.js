@@ -406,7 +406,7 @@ function DiscRow({ row, rowIndex, rowCount, maxValue, dataMin, dataMax, rank }) 
     );
 }
 
-export default function DatavizStub({ data, questionIndex = 0, title }) {
+export default function DatavizStub({ data, questionIndex = 0, title, subtitle }) {
     const rows = useMemo(() => normalizeData(data), [data]);
 
     const { maxValue, dataMin, dataMax } = useMemo(() => {
@@ -499,6 +499,18 @@ export default function DatavizStub({ data, questionIndex = 0, title }) {
                                 }}>
                                 {title}
                             </Typography>
+
+                            {subtitle && (
+                                <Typography
+                                    variant="h5"
+                                    sx={{
+                                        pt: 1,
+                                        textAlign: 'center',
+                                        textWrap: 'balance',
+                                    }}>
+                                    {subtitle}
+                                </Typography>
+                            )}
                         </Box>
                     ) : null}
 

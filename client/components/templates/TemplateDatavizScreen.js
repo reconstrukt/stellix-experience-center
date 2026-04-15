@@ -27,6 +27,7 @@ export default function DatavizTemplate({ data }) {
     const eventLogoAlt = data?.fields?.eventLogo?.fields?.title ?? 'Event logo';
     const questionnaire = data?.fields?.questionnaire;
     const questionnaireId = questionnaire?.sys?.id;
+    const subtitle = data?.fields?.subtitle ?? null;
 
     /** Data currently on screen (stable until end-of-cycle merge). */
     const [results, setResults] = useState(null);
@@ -148,6 +149,7 @@ export default function DatavizTemplate({ data }) {
                 <DatavizStub
                     questionIndex={questionIndex}
                     title={title}
+                    subtitle={subtitle}
                     data={answers}
                 />
             </Stack>
