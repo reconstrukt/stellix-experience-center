@@ -74,15 +74,16 @@ export default function AgendaScreenTemplate({ data }) {
                                                 sx={{
                                                     display: 'flex',
                                                     alignItems: 'flex-start',
-                                                    gap: '110px',
+                                                    gap: '70px',
                                                     py: 1,
                                                 }}>
                                                 <Typography
                                                     sx={{
-                                                        width: '500px',
+                                                        width: '600px',
                                                         fontSize: '64px',
                                                         fontWeight: 400,
                                                         flex: '0 0 auto',
+                                                        whiteSpace: 'nowrap',
                                                     }}>
                                                     {item.timeslot}
                                                 </Typography>
