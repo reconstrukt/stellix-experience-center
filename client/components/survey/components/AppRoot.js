@@ -81,6 +81,7 @@ export default function AppRoot() {
                         currentStep <= questionCount &&
                         content[currentStep - 1] && (
                             <SurveyQuestion
+                                key={currentStep}
                                 question={content[currentStep - 1]}
                                 questionIndex={currentStep - 1}
                             />
